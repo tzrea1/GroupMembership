@@ -32,11 +32,11 @@ public class Daemon {
     // 定义心跳消息
     public static String HEARTBEAT_MESSAGE = "I'm still alive";
     // 定义心跳频率（每隔1秒发送一次心跳）
-    public static int HEARTBEAT_INTERVAL = 1000;
+    public static int HEARTBEAT_INTERVAL = 800;
     // 定义组成员列表
     public List<String> memberList = new ArrayList<>();
     // 定义离线检查频率（每隔5秒检查一次）
-    static final int OFFLINE_CHECK_INTERVAL = 500;
+    static final int OFFLINE_CHECK_INTERVAL = 1000;
     // 定义离线超时时间（如果某个节点超过30秒没有发送心跳消息，则认为该节点已经离线）
     static final int OFFLINE_TIMEOUT = 1800;
     // 定义节点的最后心跳时间映射
@@ -47,10 +47,10 @@ public class Daemon {
         try {
             // 创建ServerSocket实例
             ServerSocket serverSocket = new ServerSocket(portId);
-            // 启动离线检查线程
-            new OfflineCheckThread(this).start();
             // 启动心跳线程
             new HeartbeatThread().start();
+            // 启动离线检查线程
+            new OfflineCheckThread(this).start();
 
             // 循环接收连接请求
             while (true) {
@@ -91,6 +91,7 @@ class HeartbeatThread extends Thread {
                     //向Server传递心跳信息
                     System.out.println("正在发送心跳");
                     os.writeUTF(Daemon.HEARTBEAT_MESSAGE);
+                    os.writeUTF((i%2)+"");
                     os.flush();
                     os.close();
                 }
@@ -119,11 +120,12 @@ class MessageHandlerThread extends Thread {
             DataInputStream is = new DataInputStream(socket.getInputStream());
             // 读取消息
             String message = is.readUTF();
+            String receivedPort=is.readUTF();
             // 如果收到心跳消息
             if (Daemon.HEARTBEAT_MESSAGE.equals(message)) {
                 System.out.println("接到心跳信息");
                 // 更新组成员列表
-                updateMemberListandTime(socket,daemon);
+                updateMemberListandTime(socket,daemon,receivedPort);
             }
             is.close();
         } catch (IOException e) {
@@ -132,16 +134,16 @@ class MessageHandlerThread extends Thread {
     }
 
     //////////////////////有问题///////////////
-    private void updateMemberListandTime(Socket socket,Daemon daemon) {
+    private void updateMemberListandTime(Socket socket,Daemon daemon,String receivedPort) {
         // 获取连接的主机地址
         String host = socket.getInetAddress().getHostAddress();
-
+        String memberId=host+receivedPort;
         // 如果该主机不在组成员列表中，则将其添加到组成员列表中
-        if (!daemon.memberList.contains(host)) {
-            daemon.memberList.add(host);
+        if (!daemon.memberList.contains(memberId)) {
+            daemon.memberList.add(memberId);
         }
         // 更新客户端的最后心跳时间
-        daemon.lastHeartbeatMap.put(host, System.currentTimeMillis());
+        daemon.lastHeartbeatMap.put(memberId, System.currentTimeMillis());
     }
 }
 

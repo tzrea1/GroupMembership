@@ -38,7 +38,15 @@ public class ServerMain {
         queryThread.start();
         System.out.println("虚拟机已启动");
 
-        //在这里创建daemon的组服务
+        //在这里创建daemon的组服务// 组服务后台线程
+        Thread daemon = new Thread(new Runnable() {
+            public void run() {
+                vs.groupDaemon.startDaemon();
+            }
+        });
+        // 启动组服务后台线程
+        daemon.start();
+        System.out.println("组服务后台已启动");
 
         // 创建文件接收线程
         Initialize in = new Initialize();

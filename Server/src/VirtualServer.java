@@ -1,3 +1,4 @@
+import groupservice.Daemon;
 import localindex.IndexQuery;
 
 import java.io.*;
@@ -8,11 +9,13 @@ import java.net.Socket;
 
 public class VirtualServer {
     private int port;
+    public Daemon groupDaemon;
     // 每台服务器应该存放的xml文件数量
     private final int xmlProperNum=4;
     public VirtualServer(int portID){
         this.port=portID;
         //在这里顺便初始化组服务
+        groupDaemon=new Daemon(port+100);
     }
     public void receiveQuery() {
         try {
