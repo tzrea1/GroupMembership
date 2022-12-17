@@ -1,9 +1,9 @@
 # Default ignored files
 /shelf/
 /.idea/workspace.xml
-/vcs.xml
-/modules.xml
-/misc.xml
+/.idea/vcs.xml
+/.idea/modules.xml
+/.idea/misc.xml
 
 # Editor-based HTTP Client requests
 /httpRequests/
