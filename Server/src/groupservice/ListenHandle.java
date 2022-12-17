@@ -4,7 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-
+/**
+ * @description: 每有一个新节点请求加入时，就开启一个此线程给新节点发memberList的内容
+ * @author MXY
+ * @date 12/17/22 5:19 PM
+ * @version 1.0
+ */
 public class ListenHandle extends Thread{
     private Daemon daemon;
     private Socket socket;

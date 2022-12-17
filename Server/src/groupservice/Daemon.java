@@ -5,28 +5,29 @@ import java.net.*;
 import java.util.*;
 
 public class Daemon {
-    /**
-     * ip列表，记录可以访问的Server的ip地址
-     */
     public final static String[] ipList = new String[]
             {"212.129.245.31", "1.15.143.17", "101.35.155.147"};
-    /**
-     * port列表，记录server的3个后台端口
-     */
     public final static int[] portList = new int[]
             {9020, 9021, 9022};
-    int portId;
+    int port;
     boolean is_introducer=false;
-
+    /**
+     * @description: Daemon初始化函数
+     * @param: portId   Daemon的基础端口
+    inputIntroducer    是否为introducer
+     * @return:
+     * @author root
+     * @date: 12/17/22 4:20 PM
+     */
     public Daemon(int portId,int inputIntroducer) {
-        this.portId = portId;
+        this.port = portId;
         if(inputIntroducer==1){
             is_introducer=true;
         }
         String localIp= null;
         try {
             localIp = getPublicIp();
-            String memberId=localIp+":"+(this.portId+"");
+            String memberId=localIp+":"+(this.port+"");
             this.memberList.add(memberId);
             this.lastHeartbeatMap.put(memberId, System.currentTimeMillis());
         } catch (Exception e) {
@@ -34,12 +35,11 @@ public class Daemon {
         }
     }
 
-    //add and test by mxy
     // 定义心跳消息
     public static String HEARTBEAT_MESSAGE = "I'm still alive";
     // 定义心跳频率（每隔1秒发送一次心跳）
     public static int HEARTBEAT_INTERVAL = 1000;
-    // 定义组成员列表
+    // 定义组成员列表 格式暂且为   机器公网IP:port  例如212.129.245.31:9020
     public List<String> memberList = new ArrayList<>();
     // 定义离线检查频率（每隔5秒检查一次）
     static final int OFFLINE_CHECK_INTERVAL = 500;
@@ -47,7 +47,13 @@ public class Daemon {
     static final int OFFLINE_TIMEOUT = 1800;
     // 定义节点的最后心跳时间映射
     public Map<String, Long> lastHeartbeatMap = new HashMap<>();
-    //获取本机公网ip地址
+    /**
+     * @description:  获取本机公网ip，目前是用来将自己的信息加入memberList中
+     * @param:
+     * @return: java.lang.String
+     * @author root
+     * @date: 12/17/22 4:23 PM
+     */
     public static String getPublicIp() throws Exception{
         Process process = Runtime.getRuntime().exec("dig +short myip.opendns.com @resolver1.opendns.com");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -60,11 +66,11 @@ public class Daemon {
     public void startDaemon() {
         try {
             // 创建ServerSocket实例
-            ServerSocket serverSocket = new ServerSocket(portId);
+            ServerSocket serverSocket = new ServerSocket(port);
             //启动introducer线程
             if(is_introducer){
                 System.out.println("yesIntroducer");
-                ServerSocket introducerServerSocket=new ServerSocket(portId+100);
+                ServerSocket introducerServerSocket=new ServerSocket(port+100);
 
                 new ListenConnection(this,introducerServerSocket).start();
             }

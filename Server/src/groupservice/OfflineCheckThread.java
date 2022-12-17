@@ -1,6 +1,11 @@
 package groupservice;
 
-//离线检查类
+/**
+ * @description: 离线检查类，如果检查到有neighbor离线，就更新自己的neighbor
+ * @author MXY
+ * @date 12/17/22 5:44 PM
+ * @version 1.0
+ */
 public class OfflineCheckThread extends Thread {
     private Daemon daemon;
 

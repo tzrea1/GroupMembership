@@ -3,7 +3,12 @@ package groupservice;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
-
+/**
+ * @description: 处理心跳的线程，接到心跳后，如果来源并不是自己的neighbor就将新的来源设为自己的neighbor，更改拓扑结构
+ * @author MXY
+ * @date 12/17/22 5:43 PM
+ * @version 1.0
+ */
 public class MessageHandlerThread extends Thread {
     private Socket socket;
     private Daemon daemon;
@@ -33,7 +38,7 @@ public class MessageHandlerThread extends Thread {
         }
     }
 
-    //////////////////////有问题///////////////
+
     private void updateMemberListandTime(Socket socket,Daemon daemon,String receivedPort) {
         // 获取连接的主机地址
         String host = socket.getInetAddress().getHostAddress();
