@@ -13,8 +13,18 @@ public class ServerMain {
      **/
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        String name=null;
         int portSelected = -1;
-        int is_introducer=-1;
+        boolean is_introducer=false;
+        while (name == null) {
+            System.out.println("请输入虚拟机name:采用数字0、1、2、3....");
+            // 接收输入的name
+            name = sc.nextLine();
+            if (name.equals("0")||name.equals("1")||name.equals("2")||name.equals("3")||name.equals("4")||name.equals("5")||name.equals("6")||name.equals("7")||name.equals("8")) {
+                name = null;
+                System.out.println("请重新输入");
+            }
+        }
         while (portSelected == -1) {
             System.out.println("请输入0/1/2选择虚拟机端口：0--8820, 1--8821, 2--8822");
             //接收输入的端口号
@@ -25,19 +35,23 @@ public class ServerMain {
                 System.out.println("请重新输入");
             }
         }
-        while (is_introducer == -1) {
-            System.out.println("是否将该虚拟机设为introducer?  1：是；2：否");
+        while (true) {
+            System.out.println("是否将该虚拟机设为introducer?  yes：是；no：否");
             //接收输入的端口号
             String input = sc.nextLine();
-            is_introducer = Integer.parseInt(input);
-            if ((is_introducer != 1) && (is_introducer != 2)) {
-                is_introducer = -1;
+            if(input.equals("yes")){
+                is_introducer = true;
+            }
+            if (input.equals("yes") || input.equals("no")) {
+                break;
+            }
+            else{
                 System.out.println("请重新输入");
             }
         }
         // 创建查询虚拟机线程: portSelected
         int port = portList[portSelected];
-        VirtualServer vs = new VirtualServer(port + 100,is_introducer);
+        VirtualServer vs = new VirtualServer(name,port + 100,is_introducer);
         // 查询虚拟机线程
         Thread queryThread = new Thread(new Runnable() {
             public void run() {
