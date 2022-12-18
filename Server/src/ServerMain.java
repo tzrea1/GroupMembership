@@ -53,18 +53,17 @@ public class ServerMain {
                 System.out.println("请重新输入");
             }
         }
-        if(is_introducer==false){
-            while (deathTime == -1) {
-                System.out.println("请输入Death时间");
-                // deathTime
-                String inputStr = sc.nextLine();
-                deathTime = Integer.parseInt(inputStr);
-                if (deathTime<=0) {
-                    deathTime = -1;
-                    System.out.println("请重新输入");
-                }
+        while (deathTime == -1) {
+            System.out.println("请输入Death时间");
+            // deathTime
+            String inputStr = sc.nextLine();
+            deathTime = Integer.parseInt(inputStr);
+            if (deathTime<=0) {
+                deathTime = -1;
+                System.out.println("请重新输入");
             }
         }
+
         // 创建查询虚拟机线程: portSelected
         int port = portList[portSelected];
         VirtualServer vs = new VirtualServer(name,port + 100,is_introducer,deathTime);
