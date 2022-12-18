@@ -32,7 +32,7 @@ public class logWriteThread extends Thread{
         try {
            //建立日志写文件流
             try {
-                String currentFile="/mnt/log/"+this.selfPort+"/"+this.type;
+                String currentFile="/mnt/log/"+this.selfPort+"/"+this.type+".xml";
                 XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
                 writer = outputFactory.createXMLStreamWriter(new FileWriter(currentFile,true));
             } catch (IOException e) {
