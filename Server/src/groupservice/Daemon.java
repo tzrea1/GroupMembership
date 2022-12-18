@@ -103,6 +103,7 @@ public class Daemon {
             for(Member member : memberList){
                 if(!member.getName().equals(name)){
                     // 确定是另外一台虚拟机
+                    neighbors.clear();
                     neighbors.add(member.getName());
                 }
             }
