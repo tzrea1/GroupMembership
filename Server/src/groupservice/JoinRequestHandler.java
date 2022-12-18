@@ -40,6 +40,7 @@ public class JoinRequestHandler extends Thread{
                 daemon.memberList.add(joinMember);
                 daemon.memberList.sort(null);
             }
+            System.out.println("准备向新节点发送memberList");
             // 将MemberList封装为protobuf形式
             GossipProto.MemberList.Builder memListBuilder= GossipProto.MemberList.newBuilder();
             for (Member member:daemon.memberList) {
@@ -54,6 +55,7 @@ public class JoinRequestHandler extends Thread{
             byte[] data = memberList.toByteArray();
             inputStream.close();
             outputStream.write(data);
+            System.out.println("已向新节点发送现有memberList");
             outputStream.flush();
             outputStream.close();
             socket.close();
