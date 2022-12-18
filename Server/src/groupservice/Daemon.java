@@ -171,10 +171,11 @@ public class Daemon {
      * @Date 2022/12/17 18:56
      * @Version 1.0
      **/
+
+
     public void startDaemon() {
         try {
-            // 创建心跳heartbeatServerSocket实例
-            ServerSocket heartbeatServerSocket = new ServerSocket(port);
+
             // 创建Gossip gossipServerSocket实例
             ServerSocket gossipServerSocket = new ServerSocket(portGossip);
             //启动introducer线程
@@ -189,27 +190,21 @@ public class Daemon {
                 new JoinGroup(this).start();
             }
 
-            // 启动心跳线程
+            // 启动心跳发送线程
             new HeartbeatThread(this).start();
 
             // 启动离线检查线程
             new OfflineCheckThread(this).start();
 
-            // 启动gossip线程
+            // 启动gossip发送线程
             new GossipThread(this).start();
 
+            // 循环接收心跳信息
+            new HeartbeatListenThread(this).start();
 
-            // 循环接收连接请求
-            while (true) {
-                // 创建接收心跳连接请求的Socket
-                Socket socketHeartbeat = heartbeatServerSocket.accept();
-                // 创建接收Gossip连接请求的Socket
-                Socket socketGossip = gossipServerSocket.accept();
-                // 启动心跳连接处理线程
-                new HeartbeatHandlerThread(socketHeartbeat,this).start();
-                // 启动Gossip处理线程
-                new GossipHandlerThread(socketGossip,this).start();
-            }
+            // 循环接收gossip信息
+            new GossipListenThread(this).start();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -233,6 +228,10 @@ public class Daemon {
 
     public Map<String,Long> getLastHeartbeatMap(){
         return lastHeartbeatMap;
+    }
+
+    public int getPortGossip(){
+        return portGossip;
     }
 
 
