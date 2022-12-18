@@ -21,7 +21,9 @@ public class JoinRequestHandler extends Thread{
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             // 接收新节点发送的protobuf信息
+            System.out.println("正在接收新成员的信息");
             HeartbeatProto.Member receivedMember=HeartbeatProto.Member.parseFrom(inputStream);
+            System.out.println(receivedMember.getName()+receivedMember.getIp()+(receivedMember.getPort()+""));
             boolean existed=false;
             // 处理已存在memberList情况
             for(Member member:daemon.memberList){
