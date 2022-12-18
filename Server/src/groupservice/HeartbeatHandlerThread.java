@@ -19,6 +19,10 @@ public class HeartbeatHandlerThread extends Thread {
     }
 
     private void updateTopo(HeartbeatProto.Member receivedMember){
+        if(daemon.getNeighbors().size()<=1){
+            daemon.getNeighbors().add(receivedMember.getName());
+            return;
+        }
         int left, right, mid = Integer.parseInt(daemon.getDaemonName());
         int neb1 = Integer.parseInt(daemon.getNeighbors().get(0));
         int neb2 = Integer.parseInt(daemon.getNeighbors().get(1));
