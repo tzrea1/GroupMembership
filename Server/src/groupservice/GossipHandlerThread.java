@@ -32,6 +32,15 @@ public class GossipHandlerThread extends Thread{
             int len = inputStream.read(buf);
             byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
 
+            // 标识是否存在于传输来的信息
+            boolean allExist[]=new boolean[daemon.memberList.size()];
+            Arrays.fill(allExist, false);
+            // 记录先前List中的Member名称：和allExist对应
+            String nameBackup[]= new String[daemon.memberList.size()];
+            for(int i=0;i<daemon.memberList.size();i++){
+                nameBackup[i]=daemon.memberList.get(i).getName();
+            }
+
             GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(receivedData);
 
             // 将接收到的MemberList信息Merge到本机memberList
@@ -42,7 +51,7 @@ public class GossipHandlerThread extends Thread{
                 long recievedTimestamp=receivedMemberList.getMemberList(i).getTimestamp();
                 Member member=new Member(recievedName,recievedAddress,recievedPort,recievedTimestamp);
                 // 首先判断member在MemberList里的情况
-                int judgeResult=judgeMemberList(member);
+                int judgeResult=judgeMemberList(member,allExist);
                 // member不存在于MemberList
                 if(judgeResult==-1){
                     // 将member加入到List中
@@ -55,6 +64,17 @@ public class GossipHandlerThread extends Thread{
                     // 更新时间戳
                     daemon.memberList.get(judgeResult).setTimeStamp(member.getTimeStamp());
                     System.out.println("[RecieveGossip]:"+member.getName()+"时间戳更新");
+                }
+            }
+            // 将不同时存在于两个List的Member Remove
+            for (int i=0;i<daemon.memberList.size();i++){
+                String name=daemon.memberList.get(i).getName();
+                int index=Arrays.asList(nameBackup).indexOf(name);
+                if(index!=-1){
+                    // 该Member不在两个List中同时存在,移除
+                    if(allExist[index]==false){
+                        daemon.memberList.remove(i);
+                    }
                 }
             }
             inputStream.close();
@@ -72,12 +92,14 @@ public class GossipHandlerThread extends Thread{
      * @Date 2022/12/18 00:00
      * @Version 1.0
      **/
-    public int judgeMemberList(Member inputMember){
+    public int judgeMemberList(Member inputMember,boolean[] allExist){
         boolean isExisted=false;
         for(int i=0;i<daemon.memberList.size();i++){
             // 存在相同member
             if(daemon.memberList.get(i).exist(inputMember)){
                 isExisted=true;
+                // 记录到allExist：标识同时存在于两个List
+                allExist[i]=true;
                 if(daemon.memberList.get(i).getTimeStamp()!=inputMember.getTimeStamp()){
                     // member信息的时间戳不同
                     return i;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ import java.util.List;
 public class GossipThread extends Thread {
     //后台进程本身
     Daemon daemon;
+    private byte[] backupReserve={};
 
     /**
      * @Description TODO: 构造函数
@@ -41,7 +43,7 @@ public class GossipThread extends Thread {
                 for(int i=0;i<daemon.memberList.size();i++){
                     Member member=daemon.memberList.get(i);
                     if(daemon.getNeighbors().contains(member.getName())){
-                        new SendGossip(member.getAddress(),member.getPortGossip(),daemon).start();
+                        new SendGossip(member.getAddress(),member.getPortGossip(),daemon,backupReserve).start();
                     }
                 }
                 // 等待一段时间
@@ -55,20 +57,18 @@ public class GossipThread extends Thread {
 }
 
 class SendGossip extends Thread{
-
+    public byte[] backupReserve;
     public String recieverIp;
     public int recieverPort;
     Daemon daemon;
-    public SendGossip(String ip,int port,Daemon daemon){
+    public SendGossip(String ip,int port,Daemon daemon,byte[] backupReserve){
         this.recieverIp=ip;
         this.recieverPort=port;
         this.daemon=daemon;
+        this.backupReserve=backupReserve;
     }
     public void run(){
         try {
-            System.out.println("[SendGossip]:向"+recieverIp+": "+recieverPort+"节点发送Gossip");
-            Socket socket =new Socket(recieverIp, recieverPort);
-            OutputStream os = socket.getOutputStream();
             // 向Server传递Gossip信息
             // 封装待发送信息：与平台无关的protobuf格式
             // 将MemberList封装为protobuf形式
@@ -83,13 +83,18 @@ class SendGossip extends Thread{
             }
             GossipProto.MemberList memberList=memListBuilder.build();
             byte[] data = memberList.toByteArray();
-
-            // 发送protobuf
-            os.write(data);
-            os.flush();
-            os.close();
-            socket.close();
-
+            if(Arrays.equals(backupReserve,data)){
+                System.out.println("[SendGossip]:向"+recieverIp+": "+recieverPort+"节点发送Gossip");
+                Socket socket =new Socket(recieverIp, recieverPort);
+                OutputStream os = socket.getOutputStream();
+                // 发送protobuf
+                os.write(data);
+                os.flush();
+                os.close();
+                socket.close();
+            }
+            // 将本次发送的内容记录到backup中
+            this.backupReserve=data;
         } catch (IOException e) {
             e.printStackTrace();
         }
