@@ -16,7 +16,6 @@ import java.util.List;
 public class GossipThread extends Thread {
     //后台进程本身
     Daemon daemon;
-    private byte[] backupReserve={};
 
     /**
      * @Description TODO: 构造函数
@@ -43,7 +42,7 @@ public class GossipThread extends Thread {
                 for(int i=0;i<daemon.memberList.size();i++){
                     Member member=daemon.memberList.get(i);
                     if(daemon.getNeighbors().contains(member.getName())){
-                        new SendGossip(member.getAddress(),member.getPortGossip(),daemon,backupReserve).start();
+                        new SendGossip(member.getAddress(),member.getPortGossip(),daemon).start();
                     }
                 }
                 // 等待一段时间
@@ -57,15 +56,13 @@ public class GossipThread extends Thread {
 }
 
 class SendGossip extends Thread{
-    public byte[] backupReserve;
     public String recieverIp;
     public int recieverPort;
     Daemon daemon;
-    public SendGossip(String ip,int port,Daemon daemon,byte[] backupReserve){
+    public SendGossip(String ip,int port,Daemon daemon){
         this.recieverIp=ip;
         this.recieverPort=port;
         this.daemon=daemon;
-        this.backupReserve=backupReserve;
     }
     public void run(){
         try {
@@ -83,8 +80,8 @@ class SendGossip extends Thread{
             }
             GossipProto.MemberList memberList=memListBuilder.build();
             byte[] data = memberList.toByteArray();
-            if(!Arrays.equals(backupReserve,data)){
-                System.out.println("[SendGossip]:信息有更新，新旧字节数分别为："+data .length+" "+backupReserve.length);
+            if(!Arrays.equals(daemon.gossipBackup,data)){
+                System.out.println("[SendGossip]:信息有更新，新旧字节数分别为："+data .length+" "+daemon.gossipBackup.length);
                 System.out.println("[SendGossip]:向"+recieverIp+": "+recieverPort+"节点发送Gossip");
                 Socket socket =new Socket(recieverIp, recieverPort);
                 OutputStream os = socket.getOutputStream();
@@ -95,7 +92,7 @@ class SendGossip extends Thread{
                 socket.close();
             }
             // 将本次发送的内容记录到backup中
-            this.backupReserve=data;
+            daemon.gossipBackup=data;
         } catch (IOException e) {
             e.printStackTrace();
         }

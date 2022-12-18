@@ -23,6 +23,9 @@ public class Daemon {
     // 定义离线超时时间（如果某个节点超过30秒没有发送心跳消息，则认为该节点已经离线）
     static final int OFFLINE_TIMEOUT = 1800;
 
+    // Gossip触发所需，上一次Gossip时的数据字节流
+    byte[] gossipBackup={};
+
     // 本机名称
     private String name;
     // 本机公网IP
