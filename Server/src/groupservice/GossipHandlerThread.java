@@ -3,6 +3,7 @@ package groupservice;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class GossipHandlerThread extends Thread{
     private Socket socket;
@@ -27,7 +28,11 @@ public class GossipHandlerThread extends Thread{
             InputStream inputStream = socket.getInputStream();
 
             // 接收传递过来的MemberList信息
-            GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(inputStream);
+            byte[] buf = new byte[2048];
+            int len = inputStream.read(buf);
+            byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
+
+            GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(receivedData);
 
             // 将接收到的MemberList信息Merge到本机memberList
             for (int i=0;i<receivedMemberList.getMemberListList().size();i++) {
