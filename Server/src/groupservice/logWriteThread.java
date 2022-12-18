@@ -50,22 +50,24 @@ public class logWriteThread extends Thread{
             writer.writeEndElement();
             writer.writeCharacters("\n");
 
-            writer.writeStartElement("object");
-            writer.writeCharacters("\n");
-            writer.writeStartElement("name");
-            writer.writeCharacters(this.serverName);
-            writer.writeEndElement();
-            writer.writeCharacters("\n");
-            writer.writeStartElement("ip");
-            writer.writeCharacters(this.serverIp);
-            writer.writeEndElement();
-            writer.writeCharacters("\n");
-            writer.writeStartElement("port");
-            writer.writeCharacters(this.serverPort+"");
-            writer.writeEndElement();
-            writer.writeCharacters("\n");
-            writer.writeEndElement();
-            writer.writeCharacters("\n");
+            if(!type.equals("gossip")) {
+                writer.writeStartElement("object");
+                writer.writeCharacters("\n");
+                writer.writeStartElement("name");
+                writer.writeCharacters(this.serverName);
+                writer.writeEndElement();
+                writer.writeCharacters("\n");
+                writer.writeStartElement("ip");
+                writer.writeCharacters(this.serverIp);
+                writer.writeEndElement();
+                writer.writeCharacters("\n");
+                writer.writeStartElement("port");
+                writer.writeCharacters(this.serverPort + "");
+                writer.writeEndElement();
+                writer.writeCharacters("\n");
+                writer.writeEndElement();
+                writer.writeCharacters("\n");
+            }
 
             writer.writeStartElement("changed");
             writer.writeCharacters(Boolean.toString(this.isChanged));
