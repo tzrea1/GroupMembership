@@ -51,7 +51,7 @@ public class GossipHandlerThread extends Thread{
                 long recievedTimestamp=receivedMemberList.getMemberList(i).getTimestamp();
                 Member member=new Member(recievedName,recievedAddress,recievedPort,recievedTimestamp);
                 // 首先判断member在MemberList里的情况
-                int judgeResult=judgeMemberList(member,allExist);
+                int judgeResult=judgeMemberList(member,allExist,nameBackup);
                 // member不存在于MemberList
                 if(judgeResult==-1){
                     // 将member加入到List中
@@ -101,14 +101,17 @@ public class GossipHandlerThread extends Thread{
      * @Date 2022/12/18 00:00
      * @Version 1.0
      **/
-    public int judgeMemberList(Member inputMember,boolean[] allExist){
+    public int judgeMemberList(Member inputMember,boolean[] allExist,String[] nameBackup){
         boolean isExisted=false;
         for(int i=0;i<daemon.memberList.size();i++){
             // 存在相同member
             if(daemon.memberList.get(i).exist(inputMember)){
                 isExisted=true;
                 // 记录到allExist：标识同时存在于两个List
-                allExist[i]=true;
+                int index=Arrays.asList(nameBackup).indexOf(daemon.memberList.get(i).getName());
+                if(index!=-1){
+                    allExist[index]=true;
+                }
                 if(daemon.memberList.get(i).getTimeStamp()!=inputMember.getTimeStamp()){
                     // member信息的时间戳不同
                     return i;
