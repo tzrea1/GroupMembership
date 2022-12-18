@@ -70,37 +70,13 @@ public class Member implements Comparable<Member> {
      * @Version 1.0
      **/
     public boolean exist(Member member) {
-        if(this.name!=member.getName()){
+        if(!this.name.equals(member.getName())){
             return false;
         }
-        if(this.address!=member.getAddress()){
-            return false;
-        }
-        if(this.port!=member.getPort()){
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @Description TODO: 两个Member是否完全相等
-     * @return boolean
-     * @param member
-     * @Author root
-     * @Date 2022/12/17 23:55
-     * @Version 1.0
-     **/
-    public boolean equals(Member member) {
-        if(this.name!=member.getName()){
-            return false;
-        }
-        if(this.address!=member.getAddress()){
+        if(!this.address.equals(member.getAddress())){
             return false;
         }
         if(this.port!=member.getPort()){
-            return false;
-        }
-        if(this.timestamp!=member.getTimeStamp()){
             return false;
         }
         return true;

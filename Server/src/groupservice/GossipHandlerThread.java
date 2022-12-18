@@ -26,11 +26,11 @@ public class GossipHandlerThread extends Thread{
             // 获取输入流
             InputStream inputStream = socket.getInputStream();
 
-            // 接收introducer传递过来的MemberList信息
+            // 接收传递过来的MemberList信息
             GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(inputStream);
 
             // 将接收到的MemberList信息Merge到本机memberList
-            for (int i=0;i<receivedMemberList.getMemberListCount();i++) {
+            for (int i=0;i<receivedMemberList.getMemberListList().size();i++) {
                 String recievedName=receivedMemberList.getMemberList(i).getName();
                 String recievedAddress=receivedMemberList.getMemberList(i).getIp();
                 int recievedPort=receivedMemberList.getMemberList(i).getPort();
@@ -73,7 +73,7 @@ public class GossipHandlerThread extends Thread{
             // 存在相同member
             if(daemon.memberList.get(i).exist(inputMember)){
                 isExisted=true;
-                if(!daemon.memberList.get(i).equals(inputMember)){
+                if(daemon.memberList.get(i).getTimeStamp()!=inputMember.getTimeStamp()){
                     // member信息的时间戳不同
                     return i;
                 }
