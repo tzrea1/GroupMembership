@@ -20,7 +20,7 @@ public class ServerMain {
             System.out.println("请输入虚拟机name:采用数字0、1、2、3....");
             // 接收输入的name
             name = sc.nextLine();
-            if (name.equals("0")||name.equals("1")||name.equals("2")||name.equals("3")||name.equals("4")||name.equals("5")||name.equals("6")||name.equals("7")||name.equals("8")) {
+            if (!(name.equals("0")||name.equals("1")||name.equals("2")||name.equals("3")||name.equals("4")||name.equals("5")||name.equals("6")||name.equals("7")||name.equals("8"))) {
                 name = null;
                 System.out.println("请重新输入");
             }
