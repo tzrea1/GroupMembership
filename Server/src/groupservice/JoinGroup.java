@@ -45,7 +45,7 @@ public class JoinGroup extends Thread{
             outputStream.write(data);
             outputStream.flush();
             System.out.println("Join:将本机proto信息发送给Introducer");
-            
+
             InputStream inputStream = socket.getInputStream();
             byte[] buf = new byte[1024];
             int len = inputStream.read(buf);
@@ -63,12 +63,19 @@ public class JoinGroup extends Thread{
                 if(!recievedName.equals(daemon.getDaemonName())){
                     Member recievedMember=new Member(recievedName,recievedAddress,recievedPort,recievedTimestamp);
                     daemon.memberList.add(recievedMember);
+                    daemon.memberList.sort(null);
                 }
             }
             System.out.println("Join:成功加入组成员服务");
             System.out.println("当前组成员列表:");
             for(int i=0;i<daemon.memberList.size();i++){
                 System.out.println(daemon.memberList.get(i).getName()+" "+daemon.memberList.get(i).getTimeStamp());
+            }
+            // 找到neighbors
+            System.out.println("当前Neighbors:");
+            daemon.findNeighbors();
+            for(int i=0;i<daemon.getNeighbors().size();i++){
+                System.out.println(daemon.getNeighbors().get(i));
             }
             outputStream.close();
             inputStream.close();

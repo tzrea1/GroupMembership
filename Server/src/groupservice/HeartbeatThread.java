@@ -31,7 +31,8 @@ public class HeartbeatThread extends Thread {
         //连接到目标主机
         try {
             while(true){
-                for(Member member : daemon.memberList){
+                for(int i=0;i<daemon.memberList.size();i++){
+                    Member member=daemon.memberList.get(i);
                     if(daemon.getNeighbors().contains(member.getName())){
                         new TransportHeartbeat(member.getAddress(),member.getPort(),daemon).start();
                     }
