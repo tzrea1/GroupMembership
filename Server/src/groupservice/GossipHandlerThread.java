@@ -60,11 +60,20 @@ public class GossipHandlerThread extends Thread{
                     System.out.println("[RecieveGossip]:"+member.getName()+"加入到List中");
                 }
                 // member存在于MemberList中，但时间戳不同
-                if(judgeResult>=0){
+                else if(judgeResult>=0){
                     // 更新时间戳
                     daemon.memberList.get(judgeResult).setTimeStamp(member.getTimeStamp());
                     System.out.println("[RecieveGossip]:"+member.getName()+"时间戳更新");
                 }
+                else{
+                    System.out.println("[RecieveGossip]: MemberList无更改");
+                }
+                String members="";
+                for(int j=0;j<daemon.memberList.size();j++){
+                    members+=daemon.memberList.get(j).getName();
+                    members+=" ";
+                }
+                System.out.println("[RecieveGossip]: 当前MemberList成员 "+members);
             }
             // 将不同时存在于两个List的Member Remove
             for (int i=0;i<daemon.memberList.size();i++){
