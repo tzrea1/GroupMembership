@@ -2,6 +2,8 @@ package groupservice;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+
 /**
  * @description: 每有一个新节点请求加入时，就开启一个此线程给新节点发memberList的内容
  * @author MXY
@@ -22,7 +24,13 @@ public class JoinRequestHandler extends Thread{
             InputStream inputStream = socket.getInputStream();
             // 接收新节点发送的protobuf信息
             System.out.println("正在接收新成员的信息");
-            HeartbeatProto.Member receivedMember=HeartbeatProto.Member.parseFrom(inputStream);
+            // 读取服务端发送的 Protobuf 消息字节数组
+            byte[] responseData = new byte[1024];
+            int len = inputStream.read(responseData);
+            byte[] firstThreeBytes = Arrays.copyOfRange(responseData, 0, len);
+            System.out.println("此member字节大小："+len);
+            // 将字节数组反序列化为 Protobuf 消息对象
+            HeartbeatProto.Member receivedMember = HeartbeatProto.Member.parseFrom(firstThreeBytes);
             System.out.println(receivedMember.getName()+receivedMember.getIp()+(receivedMember.getPort()+""));
             boolean existed=false;
             // 处理已存在memberList情况
@@ -52,9 +60,9 @@ public class JoinRequestHandler extends Thread{
                         .build());
             }
             GossipProto.MemberList memberList=memListBuilder.build();
-            byte[] data = memberList.toByteArray();
+            byte[] outData = memberList.toByteArray();
             inputStream.close();
-            outputStream.write(data);
+            outputStream.write(outData);
             System.out.println("已向新节点发送现有memberList");
             outputStream.flush();
             outputStream.close();
