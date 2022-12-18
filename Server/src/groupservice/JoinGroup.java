@@ -2,6 +2,8 @@ package groupservice;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+
 /**
  * @description: 新节点向introducer发送加入申请，接收introducer发过来的memberList
  * @author MXY
@@ -30,7 +32,6 @@ public class JoinGroup extends Thread{
         try {
             socket = new Socket(introducerIp, introducerPort);
             OutputStream outputStream = socket.getOutputStream();
-            InputStream inputStream = socket.getInputStream();
             // 将本机信息封装为protobuf
             HeartbeatProto.Member sentMessage = HeartbeatProto.Member.newBuilder()
                     .setIp(daemon.getDaemonAddress())
@@ -40,12 +41,17 @@ public class JoinGroup extends Thread{
                     .build();
             byte[] data = sentMessage.toByteArray();
             // 将protobuf信息发送给introducer
-            System.out.println("Join:将本机proto信息发送给Introducer");
+            //sentMessage.writeTo(outputStream);
             outputStream.write(data);
             outputStream.flush();
+            System.out.println("Join:将本机proto信息发送给Introducer");
+            
+            InputStream inputStream = socket.getInputStream();
+            byte[] buf = new byte[1024];
+            int len = inputStream.read(buf);
+            byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
+            GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(receivedData);
 
-            // 接收introducer传递过来的MemberList信息
-            GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(inputStream);
             System.out.println("Join:接收到Introducer发来的MemberList");
             // 将接收到的MemberList信息加入到本机memberList
             for (int i=0;i<receivedMemberList.getMemberListCount();i++) {
