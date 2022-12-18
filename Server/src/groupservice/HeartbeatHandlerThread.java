@@ -47,17 +47,21 @@ public class HeartbeatHandlerThread extends Thread {
         if(left<joiner&&joiner<mid){
             daemon.getNeighbors().remove(Integer.toString(left));
             daemon.getNeighbors().add(Integer.toString(joiner));
+            System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         } else if (mid<joiner&&joiner<right) {
             daemon.getNeighbors().remove(Integer.toString(right));
             daemon.getNeighbors().add(Integer.toString(joiner));
+            System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         } else if (right>mid) {
             daemon.getNeighbors().remove(Integer.toString(left));
             daemon.getNeighbors().add(Integer.toString(joiner));
+            System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         } else if (mid>left) {
             daemon.getNeighbors().remove(Integer.toString(right));
             daemon.getNeighbors().add(Integer.toString(joiner));
+            System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         }else {
-            System.out.println("Neighbors Not Change!");
+            System.out.println("[RecieveHeartbeat]:Neighbors Not Change!");
         }
     }
     @Override
@@ -76,6 +80,7 @@ public class HeartbeatHandlerThread extends Thread {
 
             // 收到心跳消息,更新心跳时间映射
             daemon.getLastHeartbeatMap().put(receivedMember.getName(),System.currentTimeMillis());
+            System.out.println("[RecieveHeartbeat]: "+ receivedMember.getName()+ "心跳时间更新: ");
 
             is.close();
             socket.close();

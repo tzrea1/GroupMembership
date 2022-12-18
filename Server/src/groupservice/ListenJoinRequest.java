@@ -24,7 +24,6 @@ public class ListenJoinRequest extends Thread {
             try {
                 Socket socket = introducerServerSocket.accept();
                 // 启动消息处理线程
-                System.out.println("接收到加入请求，对其进行处理!");
                 new JoinRequestHandler(socket, this.daemon).start();
             } catch (IOException e) {
                 e.printStackTrace();

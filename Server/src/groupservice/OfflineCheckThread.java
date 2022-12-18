@@ -29,7 +29,7 @@ public class OfflineCheckThread extends Thread {
                         if (currentTime - lastHeartbeatTime > daemon.OFFLINE_TIMEOUT) {
                             // 从组成员列表中删除该节点
                             daemon.memberList.remove(member);
-                            System.out.println(member.getName()+"节点离线");
+                            System.out.println("[OfflineCheck]: "+member.getName()+"节点离线");
                             // 更新拓扑结构
                             daemon.getNeighbors().remove(member.getName());
                             daemon.findNeighbors();
@@ -37,7 +37,7 @@ public class OfflineCheckThread extends Thread {
                             // 更新心跳Map映射
                             daemon.getLastHeartbeatMap().remove(member.getName());
 
-                            System.out.println("更新后neighbor: "+daemon.getNeighbors());
+                            System.out.println("[OfflineCheck]: neighbor更新为: "+daemon.getNeighbors());
                         }
                     }
                 }

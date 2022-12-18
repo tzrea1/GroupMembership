@@ -23,15 +23,15 @@ public class JoinRequestHandler extends Thread{
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             // 接收新节点发送的protobuf信息
-            System.out.println("正在接收新成员的信息");
+            System.out.println("[RecieveJoin]:接收到新成员信息");
             // 读取服务端发送的 Protobuf 消息字节数组
             byte[] buf = new byte[1024];
             int len = inputStream.read(buf);
             byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
-            System.out.println("此member字节大小："+len);
+            //System.out.println("此member字节大小："+len);
             // 将字节数组反序列化为 Protobuf 消息对象
             HeartbeatProto.Member receivedMember = HeartbeatProto.Member.parseFrom(receivedData);
-            System.out.println(receivedMember.getName()+receivedMember.getIp()+(receivedMember.getPort()+""));
+            System.out.println("[RecieveJoin]:"+receivedMember.getName()+receivedMember.getIp()+(receivedMember.getPort()+""));
             boolean existed=false;
             // 处理已存在memberList情况
             for(Member member:daemon.memberList){
@@ -49,8 +49,6 @@ public class JoinRequestHandler extends Thread{
                 daemon.memberList.sort(null);
                 daemon.findNeighbors();
             }
-            System.out.println(receivedMember.getName()+"节点加入后neighbor更新为"+daemon.getNeighbors());
-            System.out.println("准备向新节点发送memberList");
             // 将MemberList封装为protobuf形式
             GossipProto.MemberList.Builder memListBuilder= GossipProto.MemberList.newBuilder();
             for (Member member:daemon.memberList) {
@@ -64,7 +62,7 @@ public class JoinRequestHandler extends Thread{
             GossipProto.MemberList memberList=memListBuilder.build();
             byte[] outData = memberList.toByteArray();
             outputStream.write(outData);
-            System.out.println("已向新节点发送现有memberList");
+            System.out.println("[RecieveJoin]:已向新节点发送现有memberList");
             outputStream.flush();
             inputStream.close();
             outputStream.close();
