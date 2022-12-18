@@ -5,7 +5,11 @@ import java.net.*;
 import java.util.*;
 import java.util.LinkedList;
 
+
+
 public class Daemon {
+    private final static String[] ipList = new String[]
+            { "212.129.245.31", "1.15.143.17","101.35.155.147"};
     // 定义心跳消息
     public static String HEARTBEAT_MESSAGE = "I'm still alive";
     // 定义心跳频率（每隔1秒发送一次心跳）
@@ -54,7 +58,8 @@ public class Daemon {
         // 获取本机公网IP
         String localIp= null;
         try {
-            localIp = getPublicIp();
+            // localIp = getPublicIp();
+            localIp = ipList[Integer.parseInt(name)/2];
             this.address=localIp;
             if(this.isIntroducer){
                 // 将本机Member信息加入memberList
