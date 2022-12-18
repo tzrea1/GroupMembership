@@ -1,11 +1,14 @@
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ServerMain {
     private final static String[] ipList = new String[]
             { "212.129.245.31", "1.15.143.17","101.35.155.147"};
     private final static int[] portList = new int[]
             {8820, 8821, 8822};
     /**
-     * @Description TODO: 执行初始化流程，包括切分xml和将xml发送给各个虚拟机
+     * @Description TODO: 执行初始化流程，包括切分xml和将xml发送给各个虚拟机4
      * @return
      * @Author root
      * @Date 2022/12/11 18:14

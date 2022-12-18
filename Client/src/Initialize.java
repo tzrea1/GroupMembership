@@ -3,7 +3,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-public class Initialize {
+public class  Initialize {
     private final static String[] ipList = new String[]
             { "212.129.245.31", "1.15.143.17","101.35.155.147"};
     private final static int[] portList = new int[]

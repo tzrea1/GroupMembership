@@ -39,11 +39,12 @@ public class Daemon {
     private int portJoin;
 
     // 标识本机是否为introducer
-    private boolean isIntroducer=false;
+    public boolean isIntroducer=false;
     // 定义节点的最后心跳时间映射
     private Map<String, Long> lastHeartbeatMap = new HashMap<>();
     // 定义节点的在拓扑结构上的neighbors:记录name
     private List<String> neighbors=new ArrayList<>();
+
     /**
      * @description: Daemon构造函数
      * @param: portId   Daemon的基础端口
@@ -184,17 +185,15 @@ public class Daemon {
      * @Version 1.0
      **/
 
-
     public void startDaemon() {
         try {
             //启动introducer线程
-            if(isIntroducer){
+            if (isIntroducer) {
                 System.out.println("Server as Introducer!");
-                ServerSocket introducerServerSocket=new ServerSocket(portJoin);
+                ServerSocket introducerServerSocket = new ServerSocket(portJoin);
 
-                new ListenJoinRequest(this,introducerServerSocket).start();
-            }
-            else{
+                new ListenJoinRequest(this, introducerServerSocket).start();
+            } else {
                 // 启动向introducer连接的请求
                 new JoinGroup(this).start();
             }
@@ -242,8 +241,6 @@ public class Daemon {
     public int getPortGossip(){
         return portGossip;
     }
-
-
 }
 
 

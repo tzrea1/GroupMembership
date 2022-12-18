@@ -95,6 +95,8 @@ public class HeartbeatHandlerThread extends Thread {
 
             is.close();
             socket.close();
+            //开启一次写心跳日志的线程
+            new logWriteThread(daemon.getDaemonPort(),"heartbeat",System.currentTimeMillis(),receivedMember.getName(),receivedMember.getIp(),receivedMember.getPort(),false,daemon.memberList).start();
 
         } catch (IOException e) {
             e.printStackTrace();
