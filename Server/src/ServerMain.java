@@ -39,16 +39,6 @@ public class ServerMain {
                 System.out.println("请重新输入");
             }
         }
-        while (deathTime == -1) {
-            System.out.println("请输入Death时间");
-            // deathTime
-            String inputStr = sc.nextLine();
-            deathTime = Integer.parseInt(inputStr);
-            if (deathTime>0) {
-                deathTime = -1;
-                System.out.println("请重新输入");
-            }
-        }
         while (true) {
             System.out.println("是否将该虚拟机设为introducer?  yes：是；no：否");
             //接收输入的端口号
@@ -61,6 +51,18 @@ public class ServerMain {
             }
             else{
                 System.out.println("请重新输入");
+            }
+        }
+        if(is_introducer==false){
+            while (deathTime == -1) {
+                System.out.println("请输入Death时间");
+                // deathTime
+                String inputStr = sc.nextLine();
+                deathTime = Integer.parseInt(inputStr);
+                if (deathTime<=0) {
+                    deathTime = -1;
+                    System.out.println("请重新输入");
+                }
             }
         }
         // 创建查询虚拟机线程: portSelected
