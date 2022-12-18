@@ -36,7 +36,7 @@ public class Daemon {
     // 定义节点的最后心跳时间映射
     private Map<String, Long> lastHeartbeatMap = new HashMap<>();
     // 定义节点的在拓扑结构上的neighbors:记录name
-    private List<String> neighbors;
+    private List<String> neighbors=new ArrayList<>();
     /**
      * @description: Daemon构造函数
      * @param: portId   Daemon的基础端口
