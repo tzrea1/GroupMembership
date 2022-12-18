@@ -43,9 +43,9 @@ public class GossipThread extends Thread {
                     if(daemon.getNeighbors().contains(member.getName())){
                         new SendGossip(member.getAddress(),member.getPortGossip(),daemon).start();
                     }
-                    // 等待一段时间
-                    Thread.sleep(Daemon.GOSSIP_INTERVAL);
                 }
+                // 等待一段时间
+                Thread.sleep(Daemon.GOSSIP_INTERVAL);
             }
         } catch ( InterruptedException e) {
             e.printStackTrace();
