@@ -24,7 +24,7 @@ public class GossipListenThread extends Thread{
         ServerSocket gossipServerSocket = null;
         try {
             gossipServerSocket = new ServerSocket(daemon.getPortGossip());
-            while (true) {
+            while (daemon.isRunning) {
                 // 创建接收心跳连接请求的Socket
                 Socket socketGossip = gossipServerSocket.accept();
                 // 启动心跳连接处理线程

@@ -13,7 +13,7 @@ public class OfflineCheckThread extends Thread {
         this.daemon=daemon;
     }
     public void run() {
-        while (true) {
+        while (daemon.isRunning) {
             try {
                 // 获取当前时间
                 long currentTime = System.currentTimeMillis();

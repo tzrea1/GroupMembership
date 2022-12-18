@@ -42,13 +42,13 @@ public class logWriteThread extends Thread{
             writer.writeStartElement(this.type);
             writer.writeCharacters("\n");
             writer.writeStartElement("timestamp");
-            writer.writeCharacters("\n");
             // 创建一个 SimpleDateFormat 实例
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             // 使用 formatter 将时间戳格式化为日期字符串
             String dateString = formatter.format(this.timeStamp);
             writer.writeCharacters(dateString);
             writer.writeEndElement();
+            writer.writeCharacters("\n");
 
             writer.writeStartElement("object");
             writer.writeCharacters("\n");
@@ -105,6 +105,8 @@ public class logWriteThread extends Thread{
             writer.writeCharacters("\n");
 
             writer.writeEndElement();
+            writer.writeCharacters("\n");
+            writer.writeCharacters("\n");
 
             writer.close();
         } catch (XMLStreamException e) {

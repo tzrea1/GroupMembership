@@ -8,6 +8,9 @@ import java.util.LinkedList;
 
 
 public class Daemon {
+    //定时关闭线程的标签
+    public volatile boolean isRunning = true;
+
     private final static String[] ipList = new String[]
             { "212.129.245.31", "1.15.143.17","101.35.155.147"};
     // 定义心跳消息
@@ -213,6 +216,16 @@ public class Daemon {
             // 循环接收gossip信息
             new GossipListenThread(this).start();
 
+            // Stop the thread after 5 seconds
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                public void run() {
+                    if(!isIntroducer){
+                        stopThread();
+                    }
+                }
+            }, 3000);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -240,6 +253,9 @@ public class Daemon {
 
     public int getPortGossip(){
         return portGossip;
+    }
+    public void stopThread() {
+        this.isRunning = false;
     }
 }
 

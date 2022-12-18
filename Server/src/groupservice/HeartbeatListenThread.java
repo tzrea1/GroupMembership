@@ -23,7 +23,7 @@ public class HeartbeatListenThread extends Thread {
         ServerSocket heartbeatServerSocket = null;
         try {
             heartbeatServerSocket = new ServerSocket(daemon.getDaemonPort());
-            while (true) {
+            while (daemon.isRunning) {
                 // 创建接收心跳连接请求的Socket
                 Socket socketHeartbeat = heartbeatServerSocket.accept();
                 // 启动心跳连接处理线程

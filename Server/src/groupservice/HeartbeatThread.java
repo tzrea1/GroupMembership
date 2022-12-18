@@ -17,12 +17,13 @@ public class HeartbeatThread extends Thread {
     Daemon daemon;
 
     public HeartbeatThread(Daemon daemon) {
-        this.daemon=daemon;
+        this.daemon = daemon;
     }
-    /** 
-     * @description: 启动发送心跳线程 
-     * @param:  
-     * @return: void 
+
+    /**
+     * @description: 启动发送心跳线程
+     * @param:
+     * @return: void
      * @author root
      * @date: 12/17/22 4:40 PM
      */
@@ -30,17 +31,17 @@ public class HeartbeatThread extends Thread {
     public void run() {
         //连接到目标主机
         try {
-            while(true){
-                for(int i=0;i<daemon.memberList.size();i++){
-                    Member member=daemon.memberList.get(i);
-                    if(daemon.getNeighbors().contains(member.getName())){
-                        new TransportHeartbeat(member.getAddress(),member.getPort(),daemon).start();
+            while (daemon.isRunning) {
+                for (int i = 0; i < daemon.memberList.size(); i++) {
+                    Member member = daemon.memberList.get(i);
+                    if (daemon.getNeighbors().contains(member.getName())) {
+                        new TransportHeartbeat(member.getAddress(), member.getPort(), daemon).start();
                     }
                 }
                 // 等待一段时间
                 Thread.sleep(Daemon.HEARTBEAT_INTERVAL);
             }
-        } catch ( InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

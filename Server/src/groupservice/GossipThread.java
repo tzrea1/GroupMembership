@@ -38,7 +38,7 @@ public class GossipThread extends Thread {
     public void run() {
         //连接到目标主机
         try {
-            while(true){
+            while(daemon.isRunning){
                 for(int i=0;i<daemon.memberList.size();i++){
                     Member member=daemon.memberList.get(i);
                     if(daemon.getNeighbors().contains(member.getName())){
