@@ -49,6 +49,7 @@ public class JoinRequestHandler extends Thread{
                 daemon.memberList.sort(null);
                 daemon.findNeighbors();
             }
+            System.out.println(receivedMember.getName()+"节点加入后neighbor更新为"+daemon.getNeighbors());
             System.out.println("准备向新节点发送memberList");
             // 将MemberList封装为protobuf形式
             GossipProto.MemberList.Builder memListBuilder= GossipProto.MemberList.newBuilder();
