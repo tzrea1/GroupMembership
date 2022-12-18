@@ -21,7 +21,7 @@ public class OfflineCheckThread extends Thread {
                 for (Member member : daemon.memberList) {
                     // member是neighbor且存在于LastHeartbeatMap中
                     if(daemon.getNeighbors().contains(member.getName())&&daemon.getLastHeartbeatMap().get(member.getName())!=null ){
-                        System.out.println(member.getName());
+                        System.out.println("[OfflineCheck]:正在检查邻居节点"+member.getName()+"是否离线");
                         // 获取节点的最后心跳时间
                         long lastHeartbeatTime = daemon.getLastHeartbeatMap().get(member.getName());
 
