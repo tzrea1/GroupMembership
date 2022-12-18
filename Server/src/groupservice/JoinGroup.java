@@ -45,6 +45,7 @@ public class JoinGroup extends Thread{
 
             // 接收introducer传递过来的MemberList信息
             GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(inputStream);
+            System.out.println("Join:接收到Introducer发来的MemberList");
             // 将接收到的MemberList信息加入到本机memberList
             for (int i=0;i<receivedMemberList.getMemberListCount();i++) {
                 String recievedName=receivedMemberList.getMemberList(i).getName();
@@ -57,6 +58,7 @@ public class JoinGroup extends Thread{
                     daemon.memberList.add(recievedMember);
                 }
             }
+            System.out.println("Join:成功加入组成员服务");
             outputStream.close();
             inputStream.close();
             socket.close();
