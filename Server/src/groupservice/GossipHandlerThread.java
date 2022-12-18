@@ -31,6 +31,8 @@ public class GossipHandlerThread extends Thread{
             byte[] buf = new byte[2048];
             int len = inputStream.read(buf);
             byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
+            // 是否对memberList进行了改动
+            boolean isChanged=false;
 
             // 标识是否存在于传输来的信息
             boolean allExist[]=new boolean[daemon.memberList.size()];
@@ -58,12 +60,14 @@ public class GossipHandlerThread extends Thread{
                     daemon.memberList.add(member);
                     daemon.memberList.sort(null);
                     System.out.println("[RecieveGossip]:"+member.getName()+"加入到List中");
+                    isChanged=true;
                 }
                 // member存在于MemberList中，但时间戳不同
                 else if(judgeResult>=0){
                     // 更新时间戳
                     daemon.memberList.get(judgeResult).setTimeStamp(member.getTimeStamp());
                     System.out.println("[RecieveGossip]:"+member.getName()+"时间戳更新");
+                    isChanged=true;
                 }
                 else{
                     System.out.println("[RecieveGossip]: MemberList无更改");
@@ -83,11 +87,15 @@ public class GossipHandlerThread extends Thread{
                     // 该Member不在两个List中同时存在,移除
                     if(allExist[index]==false){
                         daemon.memberList.remove(i);
+                        isChanged=true;
                     }
                 }
             }
             inputStream.close();
             socket.close();
+
+            // 开启一次写Gossip日志的线程
+            new logWriteThread(daemon.getDaemonPort(),"gossip",System.currentTimeMillis(),"-","-",-1,isChanged,daemon.memberList).start();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,7 +135,4 @@ public class GossipHandlerThread extends Thread{
             return -1;
         }
     }
-
-
-
 }

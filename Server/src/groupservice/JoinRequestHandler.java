@@ -47,6 +47,8 @@ public class JoinRequestHandler extends Thread{
                 Member joinMember=new Member(receivedMember.getName(),receivedMember.getIp(),receivedMember.getPort(),receivedMember.getSendingTimestamp());
                 daemon.memberList.add(joinMember);
                 daemon.memberList.sort(null);
+                // 开启一次写Introduce日志的线程:此处的对象是，加入memberList的member
+                new logWriteThread(daemon.getDaemonPort(),"introduce",System.currentTimeMillis(),joinMember.getName(),joinMember.getAddress(),joinMember.getPort(),true,daemon.memberList).start();
             }
             // 将MemberList封装为protobuf形式
             GossipProto.MemberList.Builder memListBuilder= GossipProto.MemberList.newBuilder();

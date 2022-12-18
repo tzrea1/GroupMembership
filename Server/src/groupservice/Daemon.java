@@ -222,6 +222,8 @@ public class Daemon {
                 public void run() {
                     if(!isIntroducer){
                         stopThread();
+                        // 开启一次写Crash日志的线程: 对象保存的是Crash机器本身
+                        new logWriteThread(port,"crash",System.currentTimeMillis(),name,address,port,false,memberList).start();
                     }
                 }
             }, 3000);

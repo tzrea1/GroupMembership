@@ -11,6 +11,7 @@ import java.util.Arrays;
  * @version 1.0
  */
 public class JoinGroup extends Thread{
+    private final String introducerName="0";
     private final String introducerIp="212.129.245.31";
     private final int introducerPort=9220;
     private Daemon daemon;
@@ -77,6 +78,8 @@ public class JoinGroup extends Thread{
             inputStream.close();
             socket.close();
             System.out.println("[SendJoin]:成功加入组成员服务");
+            // 开启一次写Join日志的线程
+            new logWriteThread(daemon.getDaemonPort(),"join",System.currentTimeMillis(),introducerName,introducerIp,introducerPort,true,daemon.memberList).start();
         } catch (IOException e) {
             e.printStackTrace();
         };

@@ -84,7 +84,7 @@ public class HeartbeatHandlerThread extends Thread {
 
             HeartbeatProto.Member receivedMember=HeartbeatProto.Member.parseFrom(receivedData);
 
-            // 当前心跳消息对应的name不存在于Map中
+            // 当前心跳消息对应的name不存在于Neighbors中
             if(!daemon.getNeighbors().contains(receivedMember.getName())) {
                 updateTopo(receivedMember);
             }

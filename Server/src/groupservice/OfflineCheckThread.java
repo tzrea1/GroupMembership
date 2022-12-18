@@ -38,6 +38,8 @@ public class OfflineCheckThread extends Thread {
                             daemon.getLastHeartbeatMap().remove(member.getName());
 
                             System.out.println("[OfflineCheck]: neighbor更新为: "+daemon.getNeighbors());
+                            // 开启一次写Offline日志的线程 :对象保存的是离线的Server
+                            new logWriteThread(daemon.getDaemonPort(),"offline",System.currentTimeMillis(),member.getName(),member.getAddress(),member.getPort(),true,daemon.memberList).start();
                         }
                     }
                 }
