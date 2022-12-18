@@ -157,10 +157,13 @@ public class Daemon {
                 leftNeighborID--;
             }
             // 将左相邻、右相邻加入neighbors
-            if(!neighbors.contains(String.valueOf(leftNeighborID)))
-                neighbors.add(String.valueOf(leftNeighborID));
-            if(!neighbors.contains(String.valueOf(rightNeighborID)))
-                neighbors.add(String.valueOf(rightNeighborID));
+//            if(!neighbors.contains(String.valueOf(leftNeighborID)))
+//                neighbors.add(String.valueOf(leftNeighborID));
+//            if(!neighbors.contains(String.valueOf(rightNeighborID)))
+//                neighbors.add(String.valueOf(rightNeighborID));
+            neighbors.clear();
+            neighbors.add(String.valueOf(leftNeighborID));
+            neighbors.add(String.valueOf(rightNeighborID));
         }
         return;
     }
