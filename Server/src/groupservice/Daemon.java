@@ -116,10 +116,10 @@ public class Daemon {
             int rightNeighborID=Integer.parseInt(name)+1;
             boolean rightNeighborFound=false;
             while(true){
-                // 到达最右侧
-                if(rightNeighborID==memberList.size()){
+                // 已到达最右侧
+                if(rightNeighborID>Integer.parseInt(memberList.get(memberList.size()-1).getName())){
                     // 转一圈回到左侧
-                    rightNeighborID=0;
+                    rightNeighborID=Integer.parseInt(memberList.get(0).getName());
                 }
                 // 遍历列表，确定是否存在当前rightNeighborID
                 for(int i=0;i<memberList.size();i++){
@@ -139,9 +139,9 @@ public class Daemon {
             boolean leftNeighborFound=false;
             while(true){
                 // 到达最左侧
-                if(leftNeighborID==-1){
-                    // 转一圈回到左侧
-                    leftNeighborID=memberList.size()-1;
+                if(leftNeighborID<Integer.parseInt(memberList.get(0).getName())){
+                    // 转一圈回到右侧
+                    leftNeighborID=Integer.parseInt(memberList.get(memberList.size()-1).getName());
                 }
                 // 遍历列表，确定是否存在当前leftNeighborID
                 for(int i=0;i<memberList.size();i++){
@@ -154,7 +154,7 @@ public class Daemon {
                 if(leftNeighborFound==true){
                     break;
                 }
-                leftNeighborID++;
+                leftNeighborID--;
             }
             // 将左相邻、右相邻加入neighbors
             if(!neighbors.contains(String.valueOf(leftNeighborID)))
