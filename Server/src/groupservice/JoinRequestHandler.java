@@ -25,12 +25,12 @@ public class JoinRequestHandler extends Thread{
             // 接收新节点发送的protobuf信息
             System.out.println("正在接收新成员的信息");
             // 读取服务端发送的 Protobuf 消息字节数组
-            byte[] responseData = new byte[1024];
-            int len = inputStream.read(responseData);
-            byte[] firstThreeBytes = Arrays.copyOfRange(responseData, 0, len);
+            byte[] buf = new byte[1024];
+            int len = inputStream.read(buf);
+            byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
             System.out.println("此member字节大小："+len);
             // 将字节数组反序列化为 Protobuf 消息对象
-            HeartbeatProto.Member receivedMember = HeartbeatProto.Member.parseFrom(firstThreeBytes);
+            HeartbeatProto.Member receivedMember = HeartbeatProto.Member.parseFrom(receivedData);
             System.out.println(receivedMember.getName()+receivedMember.getIp()+(receivedMember.getPort()+""));
             boolean existed=false;
             // 处理已存在memberList情况
@@ -61,10 +61,10 @@ public class JoinRequestHandler extends Thread{
             }
             GossipProto.MemberList memberList=memListBuilder.build();
             byte[] outData = memberList.toByteArray();
-            inputStream.close();
             outputStream.write(outData);
             System.out.println("已向新节点发送现有memberList");
             outputStream.flush();
+            inputStream.close();
             outputStream.close();
             socket.close();
         } catch (IOException e) {
