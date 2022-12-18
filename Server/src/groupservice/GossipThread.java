@@ -83,7 +83,7 @@ class SendGossip extends Thread{
             }
             GossipProto.MemberList memberList=memListBuilder.build();
             byte[] data = memberList.toByteArray();
-            if(Arrays.equals(backupReserve,data)){
+            if(!Arrays.equals(backupReserve,data)){
                 System.out.println("[SendGossip]:向"+recieverIp+": "+recieverPort+"节点发送Gossip");
                 Socket socket =new Socket(recieverIp, recieverPort);
                 OutputStream os = socket.getOutputStream();
