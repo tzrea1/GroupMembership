@@ -175,9 +175,6 @@ public class Daemon {
 
     public void startDaemon() {
         try {
-
-            // 创建Gossip gossipServerSocket实例
-            ServerSocket gossipServerSocket = new ServerSocket(portGossip);
             //启动introducer线程
             if(isIntroducer){
                 System.out.println("Server as Introducer!");
