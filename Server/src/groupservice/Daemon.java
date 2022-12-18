@@ -183,8 +183,10 @@ public class Daemon {
 
                 new ListenJoinRequest(this,introducerServerSocket).start();
             }
-            // 启动向introducer连接的请求
-            new JoinGroup(this).start();
+            else{
+                // 启动向introducer连接的请求
+                new JoinGroup(this).start();
+            }
 
             // 启动心跳线程
             new HeartbeatThread(this).start();
