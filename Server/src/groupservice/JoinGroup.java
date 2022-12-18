@@ -54,17 +54,14 @@ public class JoinGroup extends Thread{
 
             System.out.println("[SendJoin]:接收到Introducer发来的MemberList");
             // 将接收到的MemberList信息加入到本机memberList
-            for (int i=0;i<receivedMemberList.getMemberListCount();i++) {
-                String recievedName=receivedMemberList.getMemberList(i).getName();
-                String recievedAddress=receivedMemberList.getMemberList(i).getIp();
-                int recievedPort=receivedMemberList.getMemberList(i).getPort();
-                long recievedTimestamp=receivedMemberList.getMemberList(i).getTimestamp();
-                // 与本机Member信息不重复
-                if(!recievedName.equals(daemon.getDaemonName())){
-                    Member recievedMember=new Member(recievedName,recievedAddress,recievedPort,recievedTimestamp);
-                    daemon.memberList.add(recievedMember);
-                    daemon.memberList.sort(null);
-                }
+            for (int i=0;i<receivedMemberList.getMemberListList().size();i++) {
+                String recievedName = receivedMemberList.getMemberList(i).getName();
+                String recievedAddress = receivedMemberList.getMemberList(i).getIp();
+                int recievedPort = receivedMemberList.getMemberList(i).getPort();
+                long recievedTimestamp = receivedMemberList.getMemberList(i).getTimestamp();
+                Member recievedMember = new Member(recievedName, recievedAddress, recievedPort, recievedTimestamp);
+                daemon.memberList.add(recievedMember);
+                daemon.memberList.sort(null);
             }
             System.out.println("[SendJoin]:成功加入组成员服务");
             System.out.println("[SendJoin]:当前组成员:");

@@ -47,7 +47,6 @@ public class JoinRequestHandler extends Thread{
                 Member joinMember=new Member(receivedMember.getName(),receivedMember.getIp(),receivedMember.getPort(),receivedMember.getSendingTimestamp());
                 daemon.memberList.add(joinMember);
                 daemon.memberList.sort(null);
-                daemon.findNeighbors();
             }
             // 将MemberList封装为protobuf形式
             GossipProto.MemberList.Builder memListBuilder= GossipProto.MemberList.newBuilder();
