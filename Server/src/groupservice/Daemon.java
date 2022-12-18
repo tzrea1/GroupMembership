@@ -56,15 +56,16 @@ public class Daemon {
         try {
             localIp = getPublicIp();
             this.address=localIp;
-            // 将本机Member信息加入memberList
-            long timestamp= System.currentTimeMillis();
-            Member member=new Member(this.name,this.address,this.port,timestamp);
-            // 加入组成员服务列表，并排序
-            this.memberList.add(member);
-            this.memberList.sort(null);
-
-            // 初始化本机的neighbors
-            findNeighbors();
+            if(this.isIntroducer){
+                // 将本机Member信息加入memberList
+                long timestamp= System.currentTimeMillis();
+                Member member=new Member(this.name,this.address,this.port,timestamp);
+                // 加入组成员服务列表，并排序
+                this.memberList.add(member);
+                this.memberList.sort(null);
+            }
+//            // 初始化本机的neighbors
+//            findNeighbors();
         } catch (Exception e) {
             e.printStackTrace();
         }
