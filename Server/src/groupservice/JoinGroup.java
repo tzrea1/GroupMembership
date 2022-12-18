@@ -40,6 +40,7 @@ public class JoinGroup extends Thread{
                     .build();
             byte[] data = sentMessage.toByteArray();
             // 将protobuf信息发送给introducer
+            System.out.println("Join:将本机proto信息发送给Introducer");
             outputStream.write(data);
             outputStream.flush();
 
@@ -59,6 +60,10 @@ public class JoinGroup extends Thread{
                 }
             }
             System.out.println("Join:成功加入组成员服务");
+            System.out.println("当前组成员列表:");
+            for(int i=0;i<daemon.memberList.size();i++){
+                System.out.println(daemon.memberList.get(i).getName()+" "+daemon.memberList.get(i).getTimeStamp());
+            }
             outputStream.close();
             inputStream.close();
             socket.close();
