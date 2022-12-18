@@ -86,6 +86,7 @@ public class Query {
             return result;
         }
         catch (FileNotFoundException | XMLStreamException ex) {
+            ex.printStackTrace();
             return null;
         }
     }
