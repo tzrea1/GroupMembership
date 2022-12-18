@@ -3,6 +3,8 @@ package groupservice;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.Arrays;
+
 /**
  * @description: 处理心跳的线程，接到心跳后，如果来源并不是自己的neighbor就将新的来源设为自己的neighbor，更改拓扑结构
  * @author MXY
@@ -71,7 +73,11 @@ public class HeartbeatHandlerThread extends Thread {
             InputStream is = socket.getInputStream();
 
             // 读取消息
-            HeartbeatProto.Member receivedMember=HeartbeatProto.Member.parseFrom(is);
+            byte[] buf = new byte[1024];
+            int len = is.read(buf);
+            byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
+
+            HeartbeatProto.Member receivedMember=HeartbeatProto.Member.parseFrom(receivedData);
 
             // 当前心跳消息对应的name不存在于Map中
             if(!daemon.getNeighbors().contains(receivedMember.getName())) {

@@ -63,7 +63,6 @@ public class JoinGroup extends Thread{
                 daemon.memberList.add(recievedMember);
                 daemon.memberList.sort(null);
             }
-            System.out.println("[SendJoin]:成功加入组成员服务");
             System.out.println("[SendJoin]:当前组成员:");
             for(int i=0;i<daemon.memberList.size();i++){
                 System.out.println(daemon.memberList.get(i).getName()+" "+daemon.memberList.get(i).getTimeStamp());
@@ -77,6 +76,7 @@ public class JoinGroup extends Thread{
             outputStream.close();
             inputStream.close();
             socket.close();
+            System.out.println("[SendJoin]:成功加入组成员服务");
         } catch (IOException e) {
             e.printStackTrace();
         };
