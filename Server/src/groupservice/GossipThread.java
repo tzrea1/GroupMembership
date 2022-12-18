@@ -66,12 +66,10 @@ class SendGossip extends Thread{
     }
     public void run(){
         try {
-            System.out.println("准备向"+recieverIp+": "+recieverPort+"节点连接并发送Gossip");
+            System.out.println("[SendGossip]:向"+recieverIp+": "+recieverPort+"节点发送Gossip");
             Socket socket =new Socket(recieverIp, recieverPort);
             OutputStream os = socket.getOutputStream();
             // 向Server传递Gossip信息
-            System.out.println("正在发送Gossip");
-
             // 封装待发送信息：与平台无关的protobuf格式
             // 将MemberList封装为protobuf形式
             GossipProto.MemberList.Builder memListBuilder= GossipProto.MemberList.newBuilder();

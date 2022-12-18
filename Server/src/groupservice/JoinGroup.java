@@ -44,7 +44,7 @@ public class JoinGroup extends Thread{
             //sentMessage.writeTo(outputStream);
             outputStream.write(data);
             outputStream.flush();
-            System.out.println("Join:将本机proto信息发送给Introducer");
+            System.out.println("[SendJoin]:将本机proto信息发送给Introducer");
 
             InputStream inputStream = socket.getInputStream();
             byte[] buf = new byte[1024];
@@ -52,7 +52,7 @@ public class JoinGroup extends Thread{
             byte[] receivedData = Arrays.copyOfRange(buf, 0, len);
             GossipProto.MemberList receivedMemberList=GossipProto.MemberList.parseFrom(receivedData);
 
-            System.out.println("Join:接收到Introducer发来的MemberList");
+            System.out.println("[SendJoin]:接收到Introducer发来的MemberList");
             // 将接收到的MemberList信息加入到本机memberList
             for (int i=0;i<receivedMemberList.getMemberListCount();i++) {
                 String recievedName=receivedMemberList.getMemberList(i).getName();
@@ -66,13 +66,13 @@ public class JoinGroup extends Thread{
                     daemon.memberList.sort(null);
                 }
             }
-            System.out.println("Join:成功加入组成员服务");
-            System.out.println("当前组成员列表:");
+            System.out.println("[SendJoin]:成功加入组成员服务");
+            System.out.println("[SendJoin]:当前组成员:");
             for(int i=0;i<daemon.memberList.size();i++){
                 System.out.println(daemon.memberList.get(i).getName()+" "+daemon.memberList.get(i).getTimeStamp());
             }
             // 找到neighbors
-            System.out.println("当前Neighbors:");
+            System.out.println("[SendJoin]:当前Neighbors:");
             daemon.findNeighbors();
             for(int i=0;i<daemon.getNeighbors().size();i++){
                 System.out.println(daemon.getNeighbors().get(i));

@@ -43,13 +43,13 @@ public class GossipHandlerThread extends Thread{
                     // 将member加入到List中
                     daemon.memberList.add(member);
                     daemon.memberList.sort(null);
-                    System.out.println("Gossip:"+member.getName()+"加入到List中");
+                    System.out.println("[RecieveGossip]:"+member.getName()+"加入到List中");
                 }
                 // member存在于MemberList中，但时间戳不同
                 if(judgeResult>=0){
                     // 更新时间戳
                     daemon.memberList.get(judgeResult).setTimeStamp(member.getTimeStamp());
-                    System.out.println("Gossip:"+member.getName()+"时间戳更新");
+                    System.out.println("[RecieveGossip]:"+member.getName()+"时间戳更新");
                 }
             }
             inputStream.close();

@@ -64,12 +64,10 @@ class TransportHeartbeat extends Thread{
     }
     public void run(){
         try {
-            System.out.println("准备向"+recieverIp+": "+recieverPort+"节点连接并发送心跳");
+            System.out.println("[SendHeartbeat]:向"+recieverIp+": "+recieverPort+"节点发送心跳");
             Socket socket =new Socket(recieverIp, recieverPort);
             OutputStream os = socket.getOutputStream();
             //向Server传递心跳信息
-            System.out.println("正在发送心跳");
-
             // 封装待发送信息：与平台无关的protobuf格式
             HeartbeatProto.Member sentMessage = HeartbeatProto.Member.newBuilder()
                     .setIp(daemon.getDaemonAddress())
