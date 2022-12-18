@@ -40,7 +40,8 @@ public class Daemon {
     private int portGossip;
     // Daemon的3号端口: 用于Join机制
     private int portJoin;
-
+    // 本机Daemon进程生命的时间长度
+    private int deathTime;
     // 标识本机是否为introducer
     public boolean isIntroducer=false;
     // 定义节点的最后心跳时间映射
@@ -56,12 +57,13 @@ public class Daemon {
      * @author root
      * @date: 12/17/22 4:20 PM
      */
-    public Daemon(String name,int port,boolean isIntroducer) {
+    public Daemon(String name,int port,boolean isIntroducer,int deathTime) {
         this.name=name;
         this.port = port;
         this.portGossip=port+100;
         this.portJoin=port+200;
         this.isIntroducer=isIntroducer;
+        this.deathTime=deathTime;
         // 获取本机公网IP
         String localIp= null;
         try {
@@ -221,12 +223,18 @@ public class Daemon {
             timer.schedule(new TimerTask() {
                 public void run() {
                     if(!isIntroducer){
-                        stopThread();
                         // 开启一次写Crash日志的线程: 对象保存的是Crash机器本身
-                        new logWriteThread(port,"crash",System.currentTimeMillis(),name,address,port,false,memberList).start();
+                        logWriteThread logThread=new logWriteThread(port,"crash",System.currentTimeMillis(),name,address,port,false,memberList);
+                        logThread.start();
+                        try {
+                            logThread.join();
+                        } catch (Exception e) {
+                            System.out.println("logThread Error!");
+                        }
+                        stopThread();
                     }
                 }
-            }, 3000);
+            }, deathTime);
 
         } catch (IOException e) {
             e.printStackTrace();

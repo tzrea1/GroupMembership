@@ -12,10 +12,10 @@ public class VirtualServer {
     public Daemon groupDaemon;
     // 每台服务器应该存放的xml文件数量
     private final int xmlProperNum=4;
-    public VirtualServer(String name, int portID,boolean is_introducer){
+    public VirtualServer(String name, int portID,boolean is_introducer,int deathTime){
         this.port=portID;
         // 初始化组服务
-        groupDaemon=new Daemon(name,port+100,is_introducer);
+        groupDaemon=new Daemon(name,port+100,is_introducer,deathTime);
     }
     public void receiveQuery() {
         try {
