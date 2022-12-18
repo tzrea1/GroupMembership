@@ -23,6 +23,7 @@ public class HeartbeatHandlerThread extends Thread {
     private void updateTopo(HeartbeatProto.Member receivedMember){
         if(daemon.getNeighbors().size()<=1){
             daemon.getNeighbors().add(receivedMember.getName());
+            System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
             return;
         }
         int left, right, mid = Integer.parseInt(daemon.getDaemonName());
@@ -48,18 +49,22 @@ public class HeartbeatHandlerThread extends Thread {
         int joiner=Integer.parseInt(receivedMember.getName());
         if(left<joiner&&joiner<mid){
             daemon.getNeighbors().remove(Integer.toString(left));
+            daemon.getLastHeartbeatMap().remove(Integer.toString(left));
             daemon.getNeighbors().add(Integer.toString(joiner));
             System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         } else if (mid<joiner&&joiner<right) {
             daemon.getNeighbors().remove(Integer.toString(right));
+            daemon.getLastHeartbeatMap().remove(Integer.toString(right));
             daemon.getNeighbors().add(Integer.toString(joiner));
             System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         } else if (right>mid) {
             daemon.getNeighbors().remove(Integer.toString(left));
+            daemon.getLastHeartbeatMap().remove(Integer.toString(left));
             daemon.getNeighbors().add(Integer.toString(joiner));
             System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         } else if (mid>left) {
             daemon.getNeighbors().remove(Integer.toString(right));
+            daemon.getLastHeartbeatMap().remove(Integer.toString(right));
             daemon.getNeighbors().add(Integer.toString(joiner));
             System.out.println("[RecieveHeartbeat]:Neighbors now: "+daemon.getNeighbors());
         }else {
