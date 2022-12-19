@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class VirtualServer {
@@ -33,11 +35,38 @@ public class VirtualServer {
                 Query query=new Query(port);
                 //确定接收到了来自客户端的信息
                 if (type.length()>0) {
-                    //向客户端发送查询结果信息
-                    String queryResult = query.queryByType(type);
-                    System.out.println("[Query] :"+type+" Result" + queryResult);
-                    os.writeUTF(queryResult);
-                    os.flush();
+                    if(type.equals("time")){
+                        // 发送joinTime
+                        String joinTime = query.getJoinTime();
+                        System.out.println("[Query] :"+type+" joinTime " + joinTime);
+                        os.writeUTF(joinTime);
+                        os.flush();
+                        // 发送crashTime
+                        String crashTime = query.getCrashTime();
+                        System.out.println("[Query] :"+type+" crashTime " + crashTime);
+                        os.writeUTF(crashTime);
+                        os.flush();
+                    }
+                    else if(type.equals("rate")){
+                        List<Long> changedTimestamps=new ArrayList<>();
+                        // 得到全部的changedTimestamp
+                        query.getChangedTimestamps(changedTimestamps);
+                        // 发送changeNum改变次数
+                        os.writeUTF(Integer.toString(changedTimestamps.size()));
+                        os.flush();
+                        // 循环发送changedTimestamp
+                        for(int i=0;i<changedTimestamps.size();i++){
+                            os.writeUTF(Long.toString(changedTimestamps.get(i)));
+                            os.flush();
+                        }
+                    }
+                    else{
+                        //向客户端发送查询结果信息
+                        String queryResult = query.queryByType(type);
+                        System.out.println("[Query] :"+type+" Result " + queryResult);
+                        os.writeUTF(queryResult);
+                        os.flush();
+                    }
                 }
 
                 //关闭Socket链接

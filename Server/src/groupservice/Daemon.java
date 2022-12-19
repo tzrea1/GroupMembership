@@ -192,8 +192,8 @@ public class Daemon {
             if (isIntroducer) {
                 System.out.println("Server as Introducer!");
                 ServerSocket introducerServerSocket = new ServerSocket(portJoin);
-
                 new ListenJoinRequest(this, introducerServerSocket).start();
+                new logWriteThread(this.getDaemonPort(),"join",System.currentTimeMillis(),this.name,this.address,this.port,true,this.memberList).start();
             } else {
                 // 启动向introducer连接的请求
                 new JoinGroup(this).start();

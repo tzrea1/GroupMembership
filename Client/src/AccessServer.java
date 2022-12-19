@@ -1,5 +1,8 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.LinkedList;
+
 /**
  * @Description TODO: Client访问Server时使用此类
  * @Author root
@@ -24,8 +27,8 @@ public class AccessServer {
      * @Date 2022/12/09 15:55
      * @Version 1.0
      **/
-    public static int sendQuery(String type,int ipSelected,int portSelected){
-        int num;
+    public static int sendQuery(String type, int ipSelected, int portSelected, int serverName, long[] joinTime, long[] crashTime, LinkedList[] timeList){
+        int num=0;
         try {
             //创建Socket链接
             Socket socket = new Socket(ipList[ipSelected], portList[portSelected]);
@@ -36,9 +39,31 @@ public class AccessServer {
             os.writeUTF(type);
             os.flush();
 
-            //接收服务端的查询信息
-            String queryResult = is.readUTF();
-            num = Integer.parseInt(queryResult);//查询到的次数
+            // 接收服务端的查询信息
+            if(type.equals("time")){
+                // 得到joinTime信息并记录
+                String joinTimeStr=is.readUTF();
+                joinTime[serverName]=Long.parseLong(joinTimeStr);
+                // 得到crashTime信息并记录
+                String crashTimeStr=is.readUTF();
+                crashTime[serverName]=Long.parseLong(crashTimeStr);
+            }
+            else if(type.equals("rate")){
+                // 得到changedNum信息并记录
+                int changedNum=Integer.parseInt(is.readUTF());
+                // 循环接收changeTimestamp
+                for(int i=0;i<changedNum;i++){
+                    String readTimestamp= is.readUTF();
+                    timeList[serverName].add(Long.parseLong(readTimestamp));
+                }
+                Collections.sort(timeList[serverName]);
+            }
+            else{
+                String queryResult = is.readUTF();
+                // 查询到的次数
+                num = Integer.parseInt(queryResult);
+            }
+            System.out.println("收取得到来自 "+ipSelected+":"+portSelected+" 的信息");
 
             //关闭Socket链接
             is.close();

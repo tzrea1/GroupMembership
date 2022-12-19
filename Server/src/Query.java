@@ -15,6 +15,8 @@ public class Query {
     private static int port;
     // log日志文件路径
     private static String LOG_Path;
+    // log日志文件名称
+    private static ArrayList<String> logFileNames=new ArrayList<String>();
     /**
      * @Description TODO: Query的构造函数
      * @return
@@ -26,6 +28,18 @@ public class Query {
     Query(int portSelected){
         port=portSelected+100;
         LOG_Path = "/mnt/log/"+port;
+        // 获取log文件的名称
+        File dir = new File(LOG_Path);
+
+        File[] xmlFiles = dir.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".xml");
+            }
+        });
+        // 存储log文件的名称
+        for (File xmlFile : xmlFiles) {
+            logFileNames.add(xmlFile.getName());
+        }
     }
 
     /**
@@ -71,67 +85,90 @@ public class Query {
         String result = exeCmd(command);//命令执行结果
         return result;
     }
+    /**
+     * @Description TODO: 获取crashTime
+     * @return
+     * @Author root
+     * @Date 2022/12/19 12:36
+     * @Version 1.0
+     **/
+    public String getCrashTime() {
+        String crashTime="";
+        String path=LOG_Path+"/crash.log";
+        // 创建 BufferedReader 对象
+        BufferedReader reader = null;
+        // 定义字符串变量来存储当前行的内容
+        try {
+            reader = new BufferedReader(new FileReader(path));
+            // 跳过不需要的行
+            for(int i=0;i<5;i++){
+                reader.readLine();
+            }
+            // 得到crashTime
+            crashTime=reader.readLine();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return crashTime;
+    }
 
-//    public static String queryByType(String type){
-//        String xmlName=type+".xml";
-//        // 获取日志文件块的名称
-//        ArrayList<String> xmlNames=new ArrayList<String>();
-//        File dir = new File(LOG_Path);
-//
-//        File[] xmlFiles = dir.listFiles(new FilenameFilter() {
-//            public boolean accept(File dir, String name) {
-//                return name.endsWith(".xml");
-//            }
-//        });
-//        // 获取xml文件的名称
-//        for (File xmlFile : xmlFiles) {
-//            xmlNames.add(xmlFile.getName());
-//        }
-//        // 不存在当前类型的日志文件
-//        if (!xmlNames.contains(xmlName)){
-//            return "0";
-//        }
-//        try {
-//            // 创建一个 XMLInputFactory
-//            XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-//            // 创建一个 XMLStreamReader
-//            String logFilePath=LOG_Path+"/"+type+".xml";
-//            System.out.println("[Query]:Reading file: "+logFilePath);
-//            XMLStreamReader reader = inputFactory.createXMLStreamReader(new FileReader(logFilePath));
-//            //创建一个字符串集合，包含DBLP数据库中所有可能的文章类型
-//            Set<String> typeSet = new HashSet<>(Arrays.asList(
-//                    type));
-//            // 用于记录匹配的块的计数器
-//            int matchedCounter = 0;
-//
-//            // 开始读取 XML 文档
-//            while (reader.hasNext()) {
-//                int event = reader.next();
-//                switch (event) {
-//                    case XMLStreamConstants.START_ELEMENT:
-//                        // 如果是某个块的开头，则重置块信息
-//                        if (typeSet.contains(reader.getLocalName())) {
-//                            matchedCounter++;
-//                        }
-//                        break;
-//                    case XMLStreamConstants.END_ELEMENT:
-//                        break;
-//                    case XMLStreamConstants.CHARACTERS:
-//                        break;
-//                }
-//            }
-//            // 关闭 XMLStreamReader
-//            reader.close();
-//            // 输出匹配的块的数量
-//            //System.out.println(matchedCounter);
-//            //次数转为字符串
-//            String result = String.valueOf(matchedCounter);
-//            //System.out.println("Finished file"+dblpBlockPath);
-//            return result;
-//        }
-//        catch (FileNotFoundException | XMLStreamException ex) {
-//            ex.printStackTrace();
-//            return null;
-//        }
-//    }
+    public String getJoinTime() {
+        String joinTime="";
+        String path=LOG_Path+"/join.log";
+        // 创建 BufferedReader 对象
+        BufferedReader reader = null;
+        // 定义字符串变量来存储当前行的内容
+        try {
+            reader = new BufferedReader(new FileReader(path));
+            // 跳过不需要的行
+            for(int i=0;i<5;i++){
+                reader.readLine();
+            }
+            // 得到joinTime
+            joinTime=reader.readLine();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return joinTime;
+    }
+
+    public void getChangedTime(String path,List<Long> changedTimestamps) {
+        // 创建 BufferedReader 对象
+        try {
+            Scanner scanner = new Scanner(new File(path));
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if(line.equals("true")){
+                    long changedTimestamp=0;
+                    // 跳过两个无用行
+                    scanner.nextLine();
+                    scanner.nextLine();
+                    // 得到MemberList发生改变时的Timestamp
+                    changedTimestamp=Long.parseLong(scanner.nextLine());
+                    changedTimestamps.add(changedTimestamp);
+                    System.out.println("[Query]: 得到changedTimestamp "+changedTimestamp);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void getChangedTimestamps(List<Long> changedTimestamps){
+        String gossipPath=LOG_Path+"/gossip.log";
+        String offlinePath=LOG_Path+"/offline.log";
+        // 得到gossip中改变memberList的TimeStamp
+        if(logFileNames.contains("gossip.log")){
+            getChangedTime(gossipPath,changedTimestamps);
+        }
+        // 得到offline中改变memberList的TimeStamp
+        if(logFileNames.contains("offline.log")){
+            getChangedTime(offlinePath,changedTimestamps);
+        }
+    }
 }
