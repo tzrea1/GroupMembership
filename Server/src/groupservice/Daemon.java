@@ -222,17 +222,15 @@ public class Daemon {
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 public void run() {
-                    if(!isIntroducer){
-                        // 开启一次写Crash日志的线程: 对象保存的是Crash机器本身
-                        logWriteThread logThread=new logWriteThread(port,"crash",System.currentTimeMillis(),name,address,port,false,memberList);
-                        logThread.start();
-                        try {
-                            logThread.join();
-                        } catch (Exception e) {
-                            System.out.println("logThread Error!");
-                        }
-                        stopThread();
+                    // 开启一次写Crash日志的线程: 对象保存的是Crash机器本身
+                    logWriteThread logThread = new logWriteThread(port, "crash", System.currentTimeMillis(), name, address, port, false, memberList);
+                    logThread.start();
+                    try {
+                        logThread.join();
+                    } catch (Exception e) {
+                        System.out.println("logThread Error!");
                     }
+                    stopThread();
                 }
             }, deathTime);
 
