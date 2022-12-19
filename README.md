@@ -1,6 +1,7 @@
 # GroupMembership
 Distributed group membership service
-分布式组成员服务
+分布式组成员服务  
+Dr-IceCream XingYu WoodyNeVerMind
 ### 项目环境
 
 项目搭建在三台腾讯云服务器中，通过Idea编译器的远程连接进行Java开发及测试：
