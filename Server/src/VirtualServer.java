@@ -54,6 +54,7 @@ public class VirtualServer {
                         // 发送changeNum改变次数
                         os.writeUTF(Integer.toString(changedTimestamps.size()));
                         os.flush();
+                        System.out.println("[Query Rate] : changeNum改变次数"+changedTimestamps.size());
                         // 循环发送changedTimestamp
                         for(int i=0;i<changedTimestamps.size();i++){
                             os.writeUTF(Long.toString(changedTimestamps.get(i)));

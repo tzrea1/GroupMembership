@@ -30,10 +30,9 @@ public class Query {
         LOG_Path = "/mnt/log/"+port;
         // 获取log文件的名称
         File dir = new File(LOG_Path);
-
         File[] xmlFiles = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.endsWith(".xml");
+                return name.endsWith(".log");
             }
         });
         // 存储log文件的名称
@@ -142,7 +141,8 @@ public class Query {
             Scanner scanner = new Scanner(new File(path));
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                if(line.equals("true")){
+                System.out.println("[Query]: 打印Log "+line);
+                if(line.contains("true")){
                     long changedTimestamp=0;
                     // 跳过两个无用行
                     scanner.nextLine();
@@ -151,10 +151,11 @@ public class Query {
                     changedTimestamp=Long.parseLong(scanner.nextLine());
                     changedTimestamps.add(changedTimestamp);
                     System.out.println("[Query]: 得到changedTimestamp "+changedTimestamp);
+                    //System.out.println("[Query]: changedTimestamps此时为 "+changedTimestamp);
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }
@@ -163,6 +164,7 @@ public class Query {
         String gossipPath=LOG_Path+"/gossip.log";
         String offlinePath=LOG_Path+"/offline.log";
         // 得到gossip中改变memberList的TimeStamp
+        System.out.println("[Query]: LogFiles "+logFileNames);
         if(logFileNames.contains("gossip.log")){
             getChangedTime(gossipPath,changedTimestamps);
         }

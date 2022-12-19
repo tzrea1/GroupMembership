@@ -27,14 +27,13 @@ public class AccessServer {
      * @Date 2022/12/09 15:55
      * @Version 1.0
      **/
-    public static int sendQuery(String type, int ipSelected, int portSelected, int serverName, long[] joinTime, long[] crashTime, LinkedList[] timeList){
+    public static int sendQuery(String type, int ipSelected, int portSelected, int serverName, long[] joinTime, long[] crashTime, LinkedList<Long> timeList){
         int num=0;
         try {
             //创建Socket链接
             Socket socket = new Socket(ipList[ipSelected], portList[portSelected]);
             DataInputStream is = new DataInputStream(socket.getInputStream());
             DataOutputStream os = new DataOutputStream(socket.getOutputStream());
-
             //向Server传递type信息
             os.writeUTF(type);
             os.flush();
@@ -51,12 +50,15 @@ public class AccessServer {
             else if(type.equals("rate")){
                 // 得到changedNum信息并记录
                 int changedNum=Integer.parseInt(is.readUTF());
+                System.out.println("changedNum "+ changedNum);
                 // 循环接收changeTimestamp
                 for(int i=0;i<changedNum;i++){
                     String readTimestamp= is.readUTF();
-                    timeList[serverName].add(Long.parseLong(readTimestamp));
+                    //System.out.println("timeList "+ readTimestamp);
+                    timeList.add(Long.parseLong(readTimestamp));
                 }
-                Collections.sort(timeList[serverName]);
+                timeList.sort(null);
+
             }
             else{
                 String queryResult = is.readUTF();

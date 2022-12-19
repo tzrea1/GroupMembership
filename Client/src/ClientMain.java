@@ -15,35 +15,35 @@ public class ClientMain {
      * @Date 2022/12/15 17:19
      * @Version 1.0
      **/
-    public static void sendQuerys(int[] numResults,String type,long[] joinTime,long[] crashTime,LinkedList[] timeList){
+    public static void sendQuerys(int[] numResults,String type,long[] joinTime,long[] crashTime,LinkedList<Long>[] timeList){
         Thread thread1 = new Thread(new Runnable() {
             public void run() {
-                numResults[0] = AccessServer.sendQuery(type, 0,0,0,joinTime,crashTime,timeList);
+                numResults[0] = AccessServer.sendQuery(type, 0,0,0,joinTime,crashTime,timeList[0]);
             }
         });
         Thread thread2 = new Thread(new Runnable() {
             public void run() {
-                numResults[1] = AccessServer.sendQuery(type, 0,1,1,joinTime,crashTime,timeList);
+                numResults[1] = AccessServer.sendQuery(type, 0,1,1,joinTime,crashTime,timeList[1]);
             }
         });
         Thread thread3 = new Thread(new Runnable() {
             public void run() {
-                numResults[2] = AccessServer.sendQuery(type, 1,0,2,joinTime,crashTime,timeList);
+                numResults[2] = AccessServer.sendQuery(type, 1,0,2,joinTime,crashTime,timeList[2]);
             }
         });
         Thread thread4 = new Thread(new Runnable() {
             public void run() {
-                numResults[3] = AccessServer.sendQuery(type, 1,1,3,joinTime,crashTime,timeList);
+                numResults[3] = AccessServer.sendQuery(type, 1,1,3,joinTime,crashTime,timeList[3]);
             }
         });
         Thread thread5 = new Thread(new Runnable() {
             public void run() {
-                numResults[4] = AccessServer.sendQuery(type, 2,0,4,joinTime,crashTime,timeList);
+                numResults[4] = AccessServer.sendQuery(type, 2,0,4,joinTime,crashTime,timeList[4]);
             }
         });
         Thread thread6 = new Thread(new Runnable() {
             public void run() {
-                numResults[5] = AccessServer.sendQuery(type, 2,1,5,joinTime,crashTime,timeList);
+                numResults[5] = AccessServer.sendQuery(type, 2,1,5,joinTime,crashTime,timeList[5]);
             }
         });
 
