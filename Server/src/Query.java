@@ -67,7 +67,7 @@ public class Query {
     public static String queryByType(String type) {
         //根据Type进行查询
         String command = "";
-        command = "grep -wo \"" + type + "\" " + LOG_Path+"/"+type+".xml" + " |wc -l"; //按type查询，非模糊搜索
+        command = "grep -wo \"" + type + "\" " + LOG_Path+"/"+type+".log" + " |wc -l"; //按type查询，非模糊搜索
         String result = exeCmd(command);//命令执行结果
         return result;
     }
