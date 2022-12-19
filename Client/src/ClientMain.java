@@ -75,7 +75,7 @@ public class ClientMain {
     public static void main(String[] args) {
         while(true) {
             Scanner sc = new Scanner(System.in);
-            System.out.println("请输入查询Type,可选：1-heartbeat,2-gossip,3-join,4-offline,5-crash");
+            System.out.println("请输入查询Type,可选：1-heartbeat,2-gossip,3-join,4-offline,5-crash,6-查询memberList错误时长占比");
 
             String input = sc.nextLine();
             // Type
@@ -116,8 +116,10 @@ public class ClientMain {
             System.out.println("查询成功! 用时：" + (double) (endTime - startTime) / 1000 + "s");
             // 输出查询结果
             for(int i=0;i<numResults.length;i++){
-                System.out.println(i+"号虚拟机日志中记录的" + type + "信息条数为：" + numResults[i]);
+                // 由于有标签头和标签尾，结果除2
+                System.out.println(i+"号虚拟机日志中记录的" + type + "信息条数为：" + numResults[i]/2);
             }
+            System.out.println();
         }
     }
 }

@@ -35,7 +35,7 @@ public class VirtualServer {
                 if (type.length()>0) {
                     //向客户端发送查询结果信息
                     String queryResult = query.queryByType(type);
-                    System.out.println("[Query]:" + queryResult);
+                    System.out.println("[Query] :"+type+" Result" + queryResult);
                     os.writeUTF(queryResult);
                     os.flush();
                 }
