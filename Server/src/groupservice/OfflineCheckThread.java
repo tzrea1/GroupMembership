@@ -31,7 +31,6 @@ public class OfflineCheckThread extends Thread {
                             daemon.memberList.remove(member);
                             System.out.println("[OfflineCheck]: "+member.getName()+"节点离线");
                             // 更新拓扑结构
-                            daemon.getNeighbors().remove(member.getName());
                             daemon.findNeighbors();
 
                             // 更新心跳Map映射

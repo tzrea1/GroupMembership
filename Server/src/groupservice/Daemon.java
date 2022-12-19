@@ -110,6 +110,7 @@ public class Daemon {
         // 组成员列表中只有本机
         if(memberList.size()==1){
             // 此时不存在neighbors
+            neighbors.clear();
             return;
         }
         // 组成员列表中只有本机和另一台虚拟机
@@ -171,11 +172,6 @@ public class Daemon {
                 }
                 leftNeighborID--;
             }
-            // 将左相邻、右相邻加入neighbors
-//            if(!neighbors.contains(String.valueOf(leftNeighborID)))
-//                neighbors.add(String.valueOf(leftNeighborID));
-//            if(!neighbors.contains(String.valueOf(rightNeighborID)))
-//                neighbors.add(String.valueOf(rightNeighborID));
             neighbors.clear();
             neighbors.add(String.valueOf(leftNeighborID));
             neighbors.add(String.valueOf(rightNeighborID));
