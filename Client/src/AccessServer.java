@@ -63,7 +63,7 @@ public class AccessServer {
                 // 查询到的次数
                 num = Integer.parseInt(queryResult);
             }
-            System.out.println("收取得到来自 "+ipSelected+":"+portSelected+" 的信息");
+            System.out.println("收取得到来自 "+ipList[ipSelected]+":"+portList[portSelected]+" 的信息");
 
             //关闭Socket链接
             is.close();
