@@ -50,7 +50,6 @@ public class AccessServer {
             else if(type.equals("rate")){
                 // 得到changedNum信息并记录
                 int changedNum=Integer.parseInt(is.readUTF());
-                System.out.println("changedNum "+ changedNum);
                 // 循环接收changeTimestamp
                 for(int i=0;i<changedNum;i++){
                     String readTimestamp= is.readUTF();
@@ -58,14 +57,12 @@ public class AccessServer {
                     timeList.add(Long.parseLong(readTimestamp));
                 }
                 timeList.sort(null);
-
             }
             else{
                 String queryResult = is.readUTF();
                 // 查询到的次数
                 num = Integer.parseInt(queryResult);
             }
-            System.out.println("收取得到来自 "+ipList[ipSelected]+":"+portList[portSelected]+" 的信息");
 
             //关闭Socket链接
             is.close();
