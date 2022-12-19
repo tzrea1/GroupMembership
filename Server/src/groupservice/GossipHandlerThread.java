@@ -72,12 +72,19 @@ public class GossipHandlerThread extends Thread{
                 else{
                     System.out.println("[RecieveGossip]: MemberList无更改");
                 }
-                String members="";
+                // 输出当前MemberList信息
+                System.out.println("[RecieveGossip]: 当前MemberList成员: ");
                 for(int j=0;j<daemon.memberList.size();j++){
+                    String members="";
                     members+=daemon.memberList.get(j).getName();
                     members+=" ";
+                    members+=daemon.memberList.get(j).getAddress();
+                    members+=" ";
+                    members+=daemon.memberList.get(j).getPort();
+                    members+=" ";
+                    members+=daemon.memberList.get(j).getTimeStamp();
+                    System.out.println(members);
                 }
-                System.out.println("[RecieveGossip]: 当前MemberList成员 "+members);
             }
             // 将不同时存在于两个List的Member Remove
             for (int i=0;i<daemon.memberList.size();i++){

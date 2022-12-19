@@ -64,9 +64,18 @@ public class JoinGroup extends Thread{
                 daemon.memberList.add(recievedMember);
                 daemon.memberList.sort(null);
             }
-            System.out.println("[SendJoin]:当前组成员:");
-            for(int i=0;i<daemon.memberList.size();i++){
-                System.out.println(daemon.memberList.get(i).getName()+" "+daemon.memberList.get(i).getTimeStamp());
+            // 输出当前MemberList信息
+            System.out.println("[SendJoin]: 当前MemberList成员: ");
+            for(int j=0;j<daemon.memberList.size();j++){
+                String members="";
+                members+=daemon.memberList.get(j).getName();
+                members+=" ";
+                members+=daemon.memberList.get(j).getAddress();
+                members+=" ";
+                members+=daemon.memberList.get(j).getPort();
+                members+=" ";
+                members+=daemon.memberList.get(j).getTimeStamp();
+                System.out.println(members);
             }
             // 找到neighbors
             System.out.println("[SendJoin]:当前Neighbors:");
