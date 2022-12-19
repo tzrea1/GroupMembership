@@ -35,7 +35,9 @@ public class HeartbeatThread extends Thread {
                 for (int i = 0; i < daemon.memberList.size(); i++) {
                     Member member = daemon.memberList.get(i);
                     if (daemon.getNeighbors().contains(member.getName())) {
-                        new TransportHeartbeat(member.getAddress(), member.getPort(), daemon).start();
+                        if(daemon.isRunning){
+                            new TransportHeartbeat(member.getAddress(), member.getPort(), daemon).start();
+                        }
                     }
                 }
                 // 等待一段时间

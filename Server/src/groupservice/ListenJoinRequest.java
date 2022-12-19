@@ -19,12 +19,14 @@ public class ListenJoinRequest extends Thread {
     }
 
     public void run() {
-        while (true) {
+        while (daemon.isRunning) {
             // 接收连接请求
             try {
                 Socket socket = introducerServerSocket.accept();
                 // 启动消息处理线程
-                new JoinRequestHandler(socket, this.daemon).start();
+                if(daemon.isRunning){
+                    new JoinRequestHandler(socket, this.daemon).start();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

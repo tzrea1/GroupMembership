@@ -25,10 +25,12 @@ public class GossipListenThread extends Thread{
         try {
             gossipServerSocket = new ServerSocket(daemon.getPortGossip());
             while (daemon.isRunning) {
-                // 创建接收心跳连接请求的Socket
+                // 创建接收Gossip连接请求的Socket
                 Socket socketGossip = gossipServerSocket.accept();
-                // 启动心跳连接处理线程
-                new GossipHandlerThread(socketGossip, daemon).start();
+                if(daemon.isRunning){
+                    // 启动心跳连接处理线程
+                    new GossipHandlerThread(socketGossip, daemon).start();
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
