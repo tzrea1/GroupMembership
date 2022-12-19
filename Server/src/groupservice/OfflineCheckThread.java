@@ -18,8 +18,9 @@ public class OfflineCheckThread extends Thread {
                 // 获取当前时间
                 long currentTime = System.currentTimeMillis();
                 // 遍历组成员列表
-                for (Member member : daemon.memberList) {
+                for (int i=0;i<daemon.memberList.size();i++) {
                     // member是neighbor且存在于LastHeartbeatMap中
+                    Member member=daemon.memberList.get(i);
                     if(daemon.getNeighbors().contains(member.getName())&&daemon.getLastHeartbeatMap().get(member.getName())!=null ){
                         System.out.println("[OfflineCheck]:正在检查邻居节点"+member.getName()+"是否离线");
                         // 获取节点的最后心跳时间
@@ -28,7 +29,7 @@ public class OfflineCheckThread extends Thread {
                         // 如果节点已经超过离线超时时间没有发送心跳消息，则认为该节点已经离线
                         if (currentTime - lastHeartbeatTime > daemon.OFFLINE_TIMEOUT) {
                             // 从组成员列表中删除该节点
-                            daemon.memberList.remove(member);
+                            daemon.memberList.remove(i);
                             System.out.println("[OfflineCheck]: "+member.getName()+"节点离线");
                             // 更新拓扑结构
                             daemon.findNeighbors();
