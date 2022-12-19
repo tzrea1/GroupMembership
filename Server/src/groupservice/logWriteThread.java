@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.List;
 
 public class logWriteThread extends Thread{
     int selfPort;
@@ -17,8 +18,8 @@ public class logWriteThread extends Thread{
     String serverIp;
     int serverPort;
     boolean isChanged;
-    LinkedList<Member> memberList;
-    public logWriteThread(int selfPort,String type, long timeStamp, String serverName, String serverIp, int serverPort,boolean isChanged, LinkedList<Member> memberList){
+    List<Member> memberList;
+    public logWriteThread(int selfPort,String type, long timeStamp, String serverName, String serverIp, int serverPort,boolean isChanged, List<Member> memberList){
         this.selfPort=selfPort;
         this.isChanged=isChanged;
         this.serverPort=serverPort;

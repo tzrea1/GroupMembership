@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.LinkedList;
+import java.util.Collections;
 
 
 
@@ -20,7 +21,7 @@ public class Daemon {
     // 定义Gossip频率（每隔2秒发送一次Gossip）
     public static int GOSSIP_INTERVAL = 2000;
     // 定义组成员列表
-    public LinkedList<Member> memberList = new LinkedList<>();
+    public List<Member> memberList = Collections.synchronizedList(new LinkedList<>());
     // 定义离线检查频率（每隔5秒检查一次）
     static final int OFFLINE_CHECK_INTERVAL = 500;
     // 定义离线超时时间（如果某个节点超过30秒没有发送心跳消息，则认为该节点已经离线）

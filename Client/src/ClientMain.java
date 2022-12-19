@@ -144,13 +144,16 @@ public class ClientMain {
                 // 记录MemberList
                 float rates[] = new float[6];
                 // 对每个Server计算rate
-                for (int i = 0; i < 6; i++) {
+                for (int i = 1; i < 6; i++) {
                     int beginIndex = accurateTimestamps.indexOf(joinTime[i]);
                     int endIndex = accurateTimestamps.indexOf(crashTime[i]);
                     int index = 0;
                     // 整个生命周期中，memberList错误的时长
                     long errorTime = 0;
-                    for (int j = beginIndex; j <= endIndex; j++) {
+                    for (int j = beginIndex+1; j <= endIndex-1; j++) {
+                        System.out.println("accurateTimestamps为："+accurateTimestamps);
+                        System.out.println(i+"号的joinTime为："+joinTime[i]+" crashTime为"+crashTime[i]);
+                        System.out.println(i+"号的timeList为："+timeList[i]);
                         // 真实timestamp与日志timestamp的差值
                         long accurateTime = accurateTimestamps.get(j);
                         long logTime = timeList[i].get(index);

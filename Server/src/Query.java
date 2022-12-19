@@ -163,14 +163,15 @@ public class Query {
     public void getChangedTimestamps(List<Long> changedTimestamps){
         String gossipPath=LOG_Path+"/gossip.log";
         String offlinePath=LOG_Path+"/offline.log";
+        String introducePath=LOG_Path+"/offline.log";
         // 得到gossip中改变memberList的TimeStamp
         System.out.println("[Query]: LogFiles "+logFileNames);
         if(logFileNames.contains("gossip.log")){
             getChangedTime(gossipPath,changedTimestamps);
         }
         // 得到offline中改变memberList的TimeStamp
-        if(logFileNames.contains("offline.log")){
-            getChangedTime(offlinePath,changedTimestamps);
+        if(logFileNames.contains("introduce.log")){
+            getChangedTime(introducePath,changedTimestamps);
         }
     }
 }

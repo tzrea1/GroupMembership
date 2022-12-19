@@ -70,7 +70,7 @@ public class GossipHandlerThread extends Thread{
                     isChanged=true;
                 }
                 else{
-                    System.out.println("[RecieveGossip]: MemberList无更改");
+
                 }
                 // 输出当前MemberList信息
                 System.out.println("[RecieveGossip]: 当前MemberList成员: ");
@@ -95,6 +95,7 @@ public class GossipHandlerThread extends Thread{
                     if(allExist[index]==false){
                         daemon.memberList.remove(i);
                         isChanged=true;
+                        System.out.println("[RecieveGossip]: MemberList中，removed");
                     }
                 }
             }
